@@ -1,8 +1,8 @@
 import newStyled from '@emotion/styled'
-import Sidebar from './Sidebar'
-import Content from './Content'
 import { useParams } from 'react-router'
 import { routesConfig } from './config'
+import Content from './Content'
+import Sidebar from './Sidebar'
 
 const BodyContainer = newStyled.div`
     height : calc(100% - 60px);
