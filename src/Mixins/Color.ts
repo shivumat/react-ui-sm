@@ -14,9 +14,9 @@ export type ColorFamilyType = keyof typeof ColorFamilyEnum
 export type ColorFamilyProps = { [K in keyof typeof ColorFamilyEnum] : string }
 export type ColorConfigType = ColorFamilyProps & {disable: string; foreGround: string; backGround: string; isDark: boolean}
 
-export const DISABLED_COLOR = '#D3D3D3'
-export const FOREGROUND_COLOR = '#020202'
-export const BACKGROUND_COLOR = '#fdfdfd'
+export const DISABLED_COLOR = '#E0E0E1'
+export const FOREGROUND_COLOR = '#171818'
+export const BACKGROUND_COLOR = '#F7F8F9'
 
 export const ColorfamilyConfig : ColorConfigType = {
   primary: '#0052CC',
@@ -35,7 +35,7 @@ export const ColorfamilyConfig : ColorConfigType = {
 
 export const getColor = (info : {colorFamily?: ColorFamilyType; color?: string; colorConfig: ColorConfigType; disabled?: boolean}) => {
     const {colorFamily = 'primary', color, colorConfig, disabled = false} = info
-    if (disabled) return colorConfig.disable
+    if (disabled) return `${colorConfig?.disable}`
     return `${color ?? colorConfig?.[colorFamily]}`
 }
  

@@ -1,9 +1,9 @@
 import newStyled from "@emotion/styled";
-import { SizeType, SizeProps } from "../../Mixins/Size";
-import { getSpacing, SpacingProps } from "../../Mixins/Spacing";
-import { getFontStyling } from "../../Mixins/Font";
-import { ColorFamilyType, darken, getColor, lighten, ColorConfigType } from "../../Mixins/Color";
 import { ButtonHTMLAttributes, DetailedHTMLProps } from "react";
+import { ColorConfigType, ColorFamilyType, darken, getColor, lighten } from "../../Mixins/Color";
+import { getFontStyling } from "../../Mixins/Font";
+import { SizeProps, SizeType } from "../../Mixins/Size";
+import { getSpacing, SpacingProps } from "../../Mixins/Spacing";
 
 export type DefaultButtonProps = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
 
@@ -66,12 +66,13 @@ export const StyledButton = newStyled.button<ButtonStyleProps>`
   color: ${({ colorFamily, variant = "filled", color, colorConfig, disabled }) => {
     const foreGroundColor = colorConfig.isDark ? colorConfig.backGround : colorConfig.foreGround;
     const diasabledColor = colorConfig.isDark ? colorConfig.foreGround : colorConfig.backGround;
-    if (variant === "subtle") return !disabled ? foreGroundColor : colorConfig?.disable;
+    if (variant === "subtle") return !disabled ? foreGroundColor : `${colorConfig?.disable}`;
     return variant === "filled" ? diasabledColor : getColor({ colorFamily, color, colorConfig, disabled });
   }};
+
   border: none;
   border-radius: ${({ borderRadius }) => borderRadius || "0.25em"};
-  ${({ disabled }) => (!disabled ? "cursor: pointer;" : "")}
+  ${({ disabled }) => (!disabled ? "cursor: pointer;" : "opacity: 0.4;")}
   &:hover {
     background-color: ${({ bgColor, variant = "filled", colorConfig, colorFamily, disabled }) => {
       const backGroundColor = colorConfig.isDark ? colorConfig.foreGround : colorConfig.backGround;

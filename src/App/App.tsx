@@ -1,8 +1,8 @@
-import Header from './Header'
 import newStyled from '@emotion/styled'
-import Body from './Body'
 import { BrowserRouter, Route, Routes } from 'react-router'
 import ContainerComponent from '../Components/Container'
+import Body from './Body'
+import Header from './Header'
 // import { useState } from 'react'
 
 const AppContainer = newStyled(ContainerComponent)`
@@ -10,11 +10,11 @@ const AppContainer = newStyled(ContainerComponent)`
     width : 100vw;
     font-size: 16px;
 `
-const App = () => {
+const App = (props : {setIsDarkMode: React.Dispatch<React.SetStateAction<boolean>>}) => {
 
     return (
         <AppContainer padding={{all : '0px'}} margin={{all : '0px'}}>
-            <Header />
+            <Header setIsDarkMode={props.setIsDarkMode}/>
             <BrowserRouter>
                 <Routes>
                 <Route path="/" element={<Body />} />
