@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react';
 import { ButtonProps, DefaultButtonProps, StyledButton } from './Button'
 import newStyled from '@emotion/styled'
 import { ColorFamilyContext, FontSizeContext, MarginContext, PaddingContext } from '../../Mixins/context'

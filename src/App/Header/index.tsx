@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react';
 import newStyled from '@emotion/styled'
 import { ColorFamilyContext } from '../../Mixins/context'
 import TextComponent from '../../Components/Text'

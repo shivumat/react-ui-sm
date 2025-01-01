@@ -1,13 +1,9 @@
 // Customizable Card Component (CardComponent.tsx)
 import React, { useContext } from "react";
 import newStyled from "@emotion/styled";
-import { SizeType, SizeProps } from "../../Mixins/Size";
+import { SizeProps } from "../../Mixins/Size";
 import { getSpacing, SpacingProps } from "../../Mixins/Spacing";
-import { getFontStyling } from "../../Mixins/Font";
-import {
-  ColorFamilyProps,
-  ColorConfigType
-} from "../../Mixins/Color";
+import { ColorConfigType } from "../../Mixins/Color";
 import { ColorFamilyContext, PaddingContext } from "../../Mixins/context";
 
 type CardComponentProps = {

@@ -1,6 +1,6 @@
 import newStyled from '@emotion/styled'
-import React, { useContext } from 'react'
-import { navItems, routesConfig } from '../config'
+import { useContext } from 'react';
+import { routesConfig } from '../config';
 import Button from '../../../Components/Button'
 import { useNavigate } from 'react-router'
 // import { NavBar } from '../../../Components/Navbar'

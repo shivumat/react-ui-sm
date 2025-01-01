@@ -1,5 +1,5 @@
 import newStyled from '@emotion/styled'
-import React, { useContext } from 'react'
+import { useContext } from 'react';
 import { ColorFamilyContext } from '../../Mixins/context'
 
 export type LoadingSpinnerProps = {

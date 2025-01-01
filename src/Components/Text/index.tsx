@@ -6,7 +6,7 @@ import { getFontStyling } from "../../Mixins/Font";
 import {
     ColorConfigType,
 } from "../../Mixins/Color";
-import { ColorFamilyContext, FontSizeContext, MarginContext, PaddingContext } from "../../Mixins/context";
+import { ColorFamilyContext, FontSizeContext} from "../../Mixins/context";
 
 type TagType = "p" | "span" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "div";
 
