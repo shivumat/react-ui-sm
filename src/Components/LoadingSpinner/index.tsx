@@ -1,6 +1,6 @@
-import newStyled from '@emotion/styled'
+import newStyled from '@emotion/styled';
 import { useContext } from 'react';
-import { ColorFamilyContext } from '../../Mixins/context'
+import { ColorFamilyContext } from '../../Mixins/context';
 
 export type LoadingSpinnerProps = {
     loaderWidth?: number

@@ -1,12 +1,12 @@
-import React, { useContext } from "react";
 import newStyled from "@emotion/styled";
-import { SizeType, SizeProps } from "../../Mixins/Size";
-import { getSpacing, SpacingProps } from "../../Mixins/Spacing";
-import { getFontStyling } from "../../Mixins/Font";
+import React, { useContext } from "react";
 import {
     ColorConfigType,
 } from "../../Mixins/Color";
-import { ColorFamilyContext, FontSizeContext} from "../../Mixins/context";
+import { ColorFamilyContext, FontSizeContext } from "../../Mixins/context";
+import { getFontStyling } from "../../Mixins/Font";
+import { SizeProps, SizeType } from "../../Mixins/Size";
+import { getSpacing, SpacingProps } from "../../Mixins/Spacing";
 
 type TagType = "p" | "span" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "div";
 

@@ -1,8 +1,8 @@
 // NavBar.tsx
 /** @jsxImportSource @emotion/react */
-import React, { useState } from 'react';
-import styled from '@emotion/styled';
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
+import React, { useState } from 'react';
 import { NavBarProps, NavItem } from './Navbar';
 
 /* ------------------ Emotion Styled Components ------------------ */

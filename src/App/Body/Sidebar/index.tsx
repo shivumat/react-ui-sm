@@ -1,10 +1,10 @@
-import newStyled from '@emotion/styled'
+import newStyled from '@emotion/styled';
 import { useContext } from 'react';
+import { useNavigate } from 'react-router';
+import Button from '../../../Components/Button';
 import { routesConfig } from '../config';
-import Button from '../../../Components/Button'
-import { useNavigate } from 'react-router'
 // import { NavBar } from '../../../Components/Navbar'
-import { ColorFamilyContext } from '../../../Mixins/context'
+import { ColorFamilyContext } from '../../../Mixins/context';
 
 const SidebarContainer = newStyled.div<{isDark : boolean, foregroundColor: string, backgroundColor: string}>`
     display: flex;
@@ -15,7 +15,7 @@ const SidebarContainer = newStyled.div<{isDark : boolean, foregroundColor: strin
     overflow-y: auto;
 `
 
-const Sidebar = (props : {pathId? : string}) => {
+const Sidebar = () => {
 
     const navigate = useNavigate();
     const colorConfig = useContext(ColorFamilyContext)
