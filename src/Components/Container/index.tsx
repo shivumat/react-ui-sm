@@ -1,12 +1,12 @@
 // Customizable Container Component (ContainerComponent.tsx)
-import React, { useContext } from "react";
 import newStyled from "@emotion/styled";
-import { SizeProps } from "../../Mixins/Size";
-import { getSpacing, SpacingProps } from "../../Mixins/Spacing";
+import React, { useContext } from "react";
 import {
-    ColorConfigType,
+  ColorConfigType,
 } from "../../Mixins/Color";
 import { ColorFamilyContext, MarginContext, PaddingContext } from "../../Mixins/context";
+import { SizeProps } from "../../Mixins/Size";
+import { getSpacing, SpacingProps } from "../../Mixins/Spacing";
 
 type ContainerType = "normal" | "flex" | "grid";
 
@@ -26,9 +26,9 @@ type ContainerComponentProps = {
 };
 
 type ContainerStyleProps = ContainerComponentProps & {
-  paddingConfig?: SizeProps;
-  marginConfig?: SizeProps;
-  colorConfig?: ColorConfigType;
+  paddingConfig: SizeProps;
+  marginConfig: SizeProps;
+  colorConfig: ColorConfigType;
 };
 
 const StyledContainer = newStyled.div<ContainerStyleProps>`

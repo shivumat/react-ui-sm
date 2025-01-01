@@ -72,7 +72,7 @@ export const StyledButton = newStyled.button<ButtonStyleProps>`
 
   border: none;
   border-radius: ${({ borderRadius }) => borderRadius || "0.25em"};
-  ${({ disabled }) => (!disabled ? "cursor: pointer;" : "opacity: 0.4;")}
+  ${({ disabled, colorConfig }) => (!disabled ? "cursor: pointer;" : `opacity: ${colorConfig.isDark ? '0.4' : '1' };`)}
   &:hover {
     background-color: ${({ bgColor, variant = "filled", colorConfig, colorFamily, disabled }) => {
       const backGroundColor = colorConfig.isDark ? colorConfig.foreGround : colorConfig.backGround;

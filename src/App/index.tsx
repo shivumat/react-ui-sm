@@ -6,8 +6,6 @@ function MainApp() {
 
   const [isDarkMode, setIsDarkMode] = useState(false)
 
-  console.log(isDarkMode)
-
   return (
     <StyleContext isDarkMode={isDarkMode}>
       <App setIsDarkMode={setIsDarkMode}/>

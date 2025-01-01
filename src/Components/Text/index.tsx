@@ -26,8 +26,8 @@ type TextComponentProps = {
 };
 
 type TextStyleProps = TextComponentProps & {
-    fontSizeConfig?: SizeProps;
-    colorConfig?: ColorConfigType;
+    fontSizeConfig: SizeProps;
+    colorConfig: ColorConfigType;
 };
 
 const StyledText = newStyled.div<TextStyleProps>`

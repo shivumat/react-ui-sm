@@ -7,7 +7,7 @@ import { ColorFamilyContext } from '../../Mixins/context';
 
 const HeaderContainer = newStyled(ContainerComponent)<{isDark : boolean, foregroundColor: string, backgroundColor: string}>`
     height : 60px;
-    border-bottom : 1px solid ${({backgroundColor, foregroundColor, isDark}) => isDark ? backgroundColor : foregroundColor}33;
+    outline : 1px solid ${({backgroundColor, foregroundColor, isDark}) => isDark ? backgroundColor : foregroundColor}33;
 `
 
 const Header = (props : {setIsDarkMode: React.Dispatch<React.SetStateAction<boolean>>}) => {
