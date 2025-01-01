@@ -1,5 +1,4 @@
 import newStyled from '@emotion/styled'
-import React from 'react'
 import HomeContent from './HomeContent'
 import { routesConfig } from '../config'
 import ContainerComponent from '../../../Components/Container'

@@ -1,4 +1,3 @@
-import React from 'react'
 import ButtonContentSize from './Size'
 import newStyled from '@emotion/styled'
 import ButtonContentColorFamily from './ColorFamily'

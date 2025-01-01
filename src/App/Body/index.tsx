@@ -1,8 +1,7 @@
-import React from 'react'
 import newStyled from '@emotion/styled'
 import Sidebar from './Sidebar'
 import Content from './Content'
-import { RouterProps, useParams } from 'react-router'
+import { useParams } from 'react-router'
 import { routesConfig } from './config'
 
 const BodyContainer = newStyled.div`

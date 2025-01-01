@@ -1,12 +1,10 @@
-import React from 'react'
 import ButtonContentSize from './Size'
-import newStyled from '@emotion/styled'
 import ButtonContentColorFamily from './ColorFamily'
 import ButtonContentVariants from './Variants'
 import ButtonMultiComponents from './MultiComponents'
 import ButtonContentDisabledVariants from './DisabledVariant'
 import { ContentPropsTableContainer } from '../Content'
-import { ButtonContentPropsConfig, summary } from './config'
+import { ButtonContentPropsConfig } from './config'
 import TextComponent from '../../../../Components/Text'
 
 const ButtonContent = () => {
