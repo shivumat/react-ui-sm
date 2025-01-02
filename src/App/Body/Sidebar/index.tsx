@@ -22,7 +22,7 @@ const Sidebar = (props : {pathId? : string}) => {
   
     return (
       <SidebarContainer isDark={colorConfig.isDark} foregroundColor={colorConfig.foreGround} backgroundColor={colorConfig.backGround}>
-        {routesConfig.map(route => <Button variant='subtle' label={route.label} onClick={() => navigate(route.path ?? '/', { replace: true })}/>)}
+        {routesConfig.map(route => <Button variant='subtle' label={route.label} onClick={() => navigate(`/${route.path ?? ''}`, { replace: true })}/>)}
         {/* <NavBar
             items={navItems}
             layout="sidebar"

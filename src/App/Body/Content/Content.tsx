@@ -1,5 +1,5 @@
-import React from "react";
 import newStyled from "@emotion/styled";
+import React from "react";
 import CardComponent from "../../../Components/Card";
 
 export const ContentCard = newStyled(CardComponent)`

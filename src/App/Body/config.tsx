@@ -1,7 +1,8 @@
 import { ReactElement } from "react";
+import { NavItem } from "../../Components/Navbar/Navbar";
 import ButtonContent from "./Content/ButtonContent";
 import HomeContent from "./Content/HomeContent";
-import { NavItem } from "../../Components/Navbar/Navbar";
+import InputContent from "./Content/InputContent";
 
 export enum MixinsTab {
     PADDING = 'Padding',
@@ -16,6 +17,7 @@ export enum MixinsTab {
 export const routesConfig : { path?: string, component: ReactElement , label: string}[] = [
     {component : <HomeContent /> , label : 'Home'},
     {path : 'button', component : <ButtonContent /> , label : 'Button'},
+    {path : 'input', component : <InputContent /> , label : 'Input'},
 ]
 
 export const navItems: NavItem[] = [
