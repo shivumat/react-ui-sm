@@ -72,16 +72,11 @@ export const ButtonContentPropsConfig : ContentPropsTableProps = [
         defaultValue : {value : 'filled'},
         valueType : {value : 'filled | outlined | subtle'},
         description : 'Variant of the button'
+    },
+    {
+        prop: 'ariaLabel',
+        defaultValue: { value: '' },
+        valueType: { value: 'string' },
+        description: 'Accessible label for screen readers, providing a textual alternative to the input field.',
     }
 ]
-
-
-export const summary = `Key Features:
-    Support for different variants (e.g., filled, outlined, subtle).
-    Configurable size, colors, margins, paddings, and font styles.
-    Support for leading and trailing components.
-    Integration with context-based styling for consistency.
-    Props Documentation
-
-    
-`

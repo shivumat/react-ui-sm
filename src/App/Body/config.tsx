@@ -1,6 +1,7 @@
 import { ReactElement } from "react";
 import { NavItem } from "../../Components/Navbar/Navbar";
 import ButtonContent from "./Content/ButtonContent";
+import DropdownContent from "./Content/DropdownContent";
 import HomeContent from "./Content/HomeContent";
 import InputContent from "./Content/InputContent";
 
@@ -18,6 +19,7 @@ export const routesConfig : { path?: string, component: ReactElement , label: st
     {component : <HomeContent /> , label : 'Home'},
     {path : 'button', component : <ButtonContent /> , label : 'Button'},
     {path : 'input', component : <InputContent /> , label : 'Input'},
+    {path : 'dropdown', component : <DropdownContent /> , label : 'Dropdown'},
 ]
 
 export const navItems: NavItem[] = [
