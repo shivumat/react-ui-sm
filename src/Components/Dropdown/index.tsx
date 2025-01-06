@@ -115,9 +115,12 @@ const StyledDropdownOptions = newStyled.div<DropdownStyleProps>`
   overflow-y: auto;
 `;
 
-const StyledOption = newStyled.div<{ isSelected?: boolean; colorConfig: ColorConfigType; colorFamily?: ColorFamilyType }>`
+const StyledOption = newStyled.div<{ isSelected?: boolean; colorConfig: ColorConfigType; colorFamily?: ColorFamilyType; color?: string; customSize?: SizeType; padding?: SpacingProps; paddingConfig: SizeProps; fontSize?: string; fontSizeConfig: SizeProps }>`
   padding: 0.5em;
   cursor: pointer;
+   ${({ customSize, padding, paddingConfig }) =>
+    getSpacing({ spacingProps: padding, size: customSize, spaceConfig: paddingConfig, key: "padding" })}
+  ${({ customSize, fontSize, fontSizeConfig }) => getFontStyling({ size: customSize, fontSize, fontConfig: fontSizeConfig })}
   background-color: ${({ isSelected, colorConfig , colorFamily, color}) => {
     const defaultColor = colorFamily ? lighten(30, getColor({ colorFamily, color, colorConfig, disabled : false })) : (colorConfig?.isDark ? lighten(10, colorConfig.foreGround) : darken(10, colorConfig.backGround));
     return (isSelected ? defaultColor : "transparent")
@@ -240,6 +243,7 @@ const Dropdown = React.memo((props: DropdownInputProps) => {
         marginConfig={marginConfig}
         fontSizeConfig={fontSizeConfig}
         colorConfig={colorConfig}
+        customSize={customSize}
         {...rest}
       >
         {selectedValue
@@ -250,6 +254,7 @@ const Dropdown = React.memo((props: DropdownInputProps) => {
       {isOpen && !!options.length &&
         ReactDOM.createPortal(
           <StyledDropdownOptions
+            customSize={customSize}
             ref={dropdownRef}
             style={{
               position: "absolute",
@@ -268,6 +273,11 @@ const Dropdown = React.memo((props: DropdownInputProps) => {
           >
             {options.map((option) => (
               <StyledOption
+                customSize={customSize}
+                padding={rest.padding}
+                paddingConfig={paddingConfig}
+                fontSize={rest.fontSize}
+                fontSizeConfig={fontSizeConfig}
                 key={option.value}
                 isSelected={selectedValue === option.value}
                 colorConfig={colorConfig}
