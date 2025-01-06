@@ -1,7 +1,7 @@
-// Updated DropdownInput Component (DropdownInput.tsx)
 import newStyled from "@emotion/styled";
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { ColorConfigType, ColorFamilyType, getColor } from "../../Mixins/Color";
+import ReactDOM from "react-dom";
+import { ColorConfigType, ColorFamilyType, darken, getColor, lighten } from "../../Mixins/Color";
 import { getFontStyling } from "../../Mixins/Font";
 import { SizeProps, SizeType } from "../../Mixins/Size";
 import { getSpacing, SpacingProps } from "../../Mixins/Spacing";
@@ -66,10 +66,8 @@ const StyledLabel = newStyled.label<{ fontSize?: string; fontSizeConfig: SizePro
   margin-bottom: 0.5em;
   font-weight: 500;
   font-size: 0.9em;
-  color: ${({ color, colorConfig, colorFamily }) =>{
-    const defaultColor = colorFamily ? getColor({ colorFamily, color, colorConfig, disabled : false }) : (colorConfig?.isDark ? colorConfig.backGround : colorConfig?.foreGround);
-    return color ?? defaultColor
-}};
+  color: ${({ colorConfig }) => (colorConfig?.isDark ? colorConfig.backGround : colorConfig?.foreGround)};
+  
   ${({ fontSize, fontSizeConfig, customSize }) => getFontStyling({ size: customSize, fontSize, fontConfig: fontSizeConfig })}
 `;
 
@@ -81,7 +79,10 @@ const StyledInputToggle = newStyled.div<DropdownStyleProps>`
     const disabledColor = colorConfig.isDark ? colorConfig.foreGround : colorConfig.backGround;
     return disabled ? disabledColor : bgColor || (colorConfig?.isDark ? colorConfig.foreGround : colorConfig?.backGround);
   }};
-  color: ${({ colorConfig }) => (colorConfig?.isDark ? colorConfig.backGround : colorConfig?.foreGround)};
+  color: ${({ color, colorConfig, colorFamily }) =>{
+    const defaultColor = colorFamily ? getColor({ colorFamily, color, colorConfig, disabled : false }) : (colorConfig?.isDark ? colorConfig.backGround : colorConfig?.foreGround);
+    return color ?? defaultColor
+}};
   border: ${({ outlined = true, borderColor, hasError, onErrorBorderColor, colorConfig }) =>
       hasError
         ? `1px solid ${onErrorBorderColor || colorConfig?.danger}`
@@ -107,22 +108,25 @@ const StyledDropdownOptions = newStyled.div<DropdownStyleProps>`
   border: 1px solid ${({ colorConfig }) =>
     colorConfig?.isDark ? colorConfig.backGround : colorConfig.foreGround};
   border-radius: ${({ borderRadius }) => borderRadius || "0.25em"};
-  margin-top: 0.5em;
   z-index: 1000;
+  height : auto;
   width: 100%;
   max-height: 200px;
   overflow-y: auto;
 `;
 
-const StyledOption = newStyled.div<{ isSelected?: boolean; colorConfig: ColorConfigType }>`
+const StyledOption = newStyled.div<{ isSelected?: boolean; colorConfig: ColorConfigType; colorFamily?: ColorFamilyType }>`
   padding: 0.5em;
   cursor: pointer;
-  background-color: ${({ isSelected, colorConfig }) => (isSelected ? colorConfig.primary : "transparent")};
+  background-color: ${({ isSelected, colorConfig , colorFamily, color}) => {
+    const defaultColor = colorFamily ? lighten(30, getColor({ colorFamily, color, colorConfig, disabled : false })) : (colorConfig?.isDark ? lighten(10, colorConfig.foreGround) : darken(10, colorConfig.backGround));
+    return (isSelected ? defaultColor : "transparent")
+  }};
   color: ${({ isSelected, colorConfig }) =>
     isSelected ? colorConfig.foreGround : colorConfig?.isDark ? colorConfig.backGround : colorConfig.foreGround};
   &:hover {
-    background-color: ${({ colorConfig }) => colorConfig.secondary};
-    color: ${({ colorConfig }) => colorConfig.foreGround};
+    background-color: ${({ colorConfig , colorFamily, color}) => colorFamily ? lighten(30, getColor({ colorFamily, color, colorConfig, disabled : false })) : (colorConfig?.isDark ? lighten(10, colorConfig.foreGround) : darken(10, colorConfig.backGround))};
+    color: ${({ colorConfig }) => colorConfig?.isDark ? colorConfig.backGround : colorConfig.foreGround};
   }
 `;
 
@@ -146,6 +150,7 @@ const Dropdown = React.memo((props: DropdownInputProps) => {
 
   const [selectedValue, setSelectedValue] = useState(value || "");
   const [isOpen, setIsOpen] = useState(false);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0, width: 0 });
   const toggleRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -155,9 +160,32 @@ const Dropdown = React.memo((props: DropdownInputProps) => {
   const colorConfig = useContext(ColorFamilyContext);
 
   const handleToggle = useCallback(() => {
-    setIsOpen(!isOpen);
+    if (toggleRef.current) {
+      const rect = toggleRef.current.getBoundingClientRect();
+      setDropdownPosition({
+        top: rect.bottom,
+        left: rect.left,
+        width: rect.width,
+      });
+      setIsOpen((prev) => !prev);
+    }
+  }, []);
+  
+  useEffect(() => {
+    if (isOpen && dropdownRef.current) {
+      const rect = toggleRef.current!.getBoundingClientRect();
+      const dropdownHeight = dropdownRef.current.scrollHeight;
+      const viewportHeight = window.innerHeight;
+  
+      const position = {
+        top: rect.bottom + dropdownHeight > viewportHeight ? rect.top - dropdownHeight : rect.bottom,
+        left: rect.left,
+        width: rect.width,
+      };
+  
+      setDropdownPosition(position);
+    }
   }, [isOpen]);
-
   const handleSelect = useCallback(
     (option: DropdownOption) => {
       setSelectedValue(option.value);
@@ -219,28 +247,40 @@ const Dropdown = React.memo((props: DropdownInputProps) => {
             options.find((opt) => opt.value === selectedValue)?.label
           : placeholder || "Select..."}
       </StyledInputToggle>
-      {isOpen && !!options.length && (
-        <StyledDropdownOptions
-          ref={dropdownRef}
-          colorConfig={colorConfig}
-          bgColor={rest.bgColor}
-          borderRadius={rest.borderRadius}
-          paddingConfig={paddingConfig}
-          marginConfig={marginConfig}
-          fontSizeConfig={fontSizeConfig}
-        >
-          {options.map((option) => (
-            <StyledOption
-              key={option.value}
-              isSelected={selectedValue === option.value}
-              colorConfig={colorConfig}
-              onClick={() => handleSelect(option)}
-            >
-              {option.label}
-            </StyledOption>
-          ))}
-        </StyledDropdownOptions>
-      )}
+      {isOpen && !!options.length &&
+        ReactDOM.createPortal(
+          <StyledDropdownOptions
+            ref={dropdownRef}
+            style={{
+              position: "absolute",
+              top: dropdownPosition.top,
+              left: dropdownPosition.left,
+              width: dropdownPosition.width,
+            }}
+            colorConfig={colorConfig}
+            bgColor={rest.bgColor}
+            borderRadius={rest.borderRadius}
+            paddingConfig={paddingConfig}
+            marginConfig={marginConfig}
+            fontSizeConfig={fontSizeConfig}
+            color={rest.color}
+            colorFamily={rest.colorFamily}
+          >
+            {options.map((option) => (
+              <StyledOption
+                key={option.value}
+                isSelected={selectedValue === option.value}
+                colorConfig={colorConfig}
+                color={rest.color}
+                colorFamily={rest.colorFamily}
+                onClick={() => handleSelect(option)}
+              >
+                {option.label}
+              </StyledOption>
+            ))}
+          </StyledDropdownOptions>,
+          document.body
+        )}
       {hasError && errorText && (
         <div className={errorClass} style={{ color: colorConfig.danger, fontSize: "0.8em" }}>
           {errorText}

@@ -1,4 +1,5 @@
 import newStyled from "@emotion/styled";
+import { DropdownOption } from "../../../../Components/Dropdown";
 import { ContentBlock, ContentPropsTableProps } from "../Content";
 
 export const StyledContentBlock = newStyled(ContentBlock)`
@@ -190,3 +191,19 @@ export const DropdownOptionConfig: ContentPropsTableProps = [
         description: 'Custom React component to render instead of the default label.',
     },
 ];
+
+
+export const options : DropdownOption[] = [
+    {
+      label: 'Option 1',
+      value: 'option1'
+    },
+    {
+      label: 'Option 2',
+      value: 'option2'
+    },
+    {
+      label: 'Option 3',
+      value: 'option3'
+    } 
+  ]

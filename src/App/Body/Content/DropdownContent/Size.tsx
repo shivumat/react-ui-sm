@@ -1,6 +1,6 @@
-import Dropdown, { DropdownOption } from '../../../../Components/Dropdown';
+import Dropdown from '../../../../Components/Dropdown';
 import { CodeBlock, ContentBody, ContentCard } from '../Content';
-import { StyledContentBlock } from './config';
+import { options, StyledContentBlock } from './config';
 
 const DropdownContentSize = () => {
 
@@ -19,21 +19,6 @@ const DropdownContentSize = () => {
 
         <Dropdown customSize='xxl' placeholder={'Dropdown'}/>
   `
-
-  const options : DropdownOption[] = [
-      {
-        label: 'Option 1',
-        value: 'option1'
-      },
-      {
-        label: 'Option 2',
-        value: 'option2'
-      },
-      {
-        label: 'Option 3',
-        value: 'option3'
-      } 
-    ]
 
   return (
     <ContentBody>

@@ -1,6 +1,6 @@
 import Dropdown from '../../../../Components/Dropdown';
 import { CodeBlock, ContentBody, ContentCard } from '../Content';
-import { StyledContentBlock } from './config';
+import { options, StyledContentBlock } from './config';
 
 const DropdownContentColorFamily = () => {
 
@@ -18,14 +18,14 @@ const DropdownContentColorFamily = () => {
     <ContentBody>
         <ContentCard>
             <StyledContentBlock>
-                <Dropdown />
-                <Dropdown colorFamily='primary'/>
-                <Dropdown colorFamily='secondary' />
-                <Dropdown colorFamily='tertiary'/>
-                <Dropdown colorFamily='info' />
-                <Dropdown colorFamily='success' />
-                <Dropdown colorFamily='warning' />
-                <Dropdown colorFamily='danger' />
+                <Dropdown options={options} />
+                <Dropdown options={options} colorFamily='primary'/>
+                <Dropdown options={options} colorFamily='secondary' />
+                <Dropdown options={options} colorFamily='tertiary'/>
+                <Dropdown options={options} colorFamily='info' />
+                <Dropdown options={options} colorFamily='success' />
+                <Dropdown options={options} colorFamily='warning' />
+                <Dropdown options={options} colorFamily='danger' />
             </StyledContentBlock>
             <CodeBlock>
                 {code.split('\n').map((line, index) => <div key={index}>{line}</div>)}
