@@ -15,8 +15,7 @@ const SidebarContainer = newStyled.div<{isDark : boolean, foregroundColor: strin
     overflow-y: auto;
 `
 
-const Sidebar = (props : {pathId? : string}) => {
-    console.log('Sidebar', props)
+const Sidebar = () => {
     const navigate = useNavigate();
     const colorConfig = useContext(ColorFamilyContext)
   

@@ -23,13 +23,13 @@ export const ButtonContentPropsConfig : ContentPropsTableProps = [
         prop : 'trailingComp',
         defaultValue : {value : ''},
         valueType : {value : 'ReactNode'},
-        description : 'React component before the label'
+        description : 'React component after the label'
     }
     ,{
         prop : 'leadingComp',
         defaultValue : {value : ''},
         valueType : {value : 'ReactNode'},
-        description : 'React component after the label'
+        description : 'React component before the label'
     }
     ,{
         prop : 'fontSize',
