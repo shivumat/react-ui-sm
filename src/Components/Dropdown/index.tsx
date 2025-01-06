@@ -1,6 +1,6 @@
-// Customizable Dropdown Input Component (DropdownInput.tsx)
+// Updated DropdownInput Component (DropdownInput.tsx)
 import newStyled from "@emotion/styled";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { ColorConfigType, ColorFamilyType, getColor } from "../../Mixins/Color";
 import { getFontStyling } from "../../Mixins/Font";
 import { SizeProps, SizeType } from "../../Mixins/Size";
@@ -51,18 +51,18 @@ type DropdownStyleProps = DropdownInputProps & {
   colorConfig: ColorConfigType;
 };
 
-const StyledDropdownWrapper = newStyled.div<{marginConfig: SizeProps , margin?: SpacingProps}>`
+const StyledDropdownWrapper = newStyled.div<{ marginConfig: SizeProps; margin?: SpacingProps }>`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   position: relative;
-  width: 100%; /* Ensures wrapper respects the parent's width */
-  box-sizing: border-box; /* Includes padding and border in the element's width */
+  width: 100%;
+  box-sizing: border-box;
   ${({ margin, marginConfig }) =>
     getSpacing({ spacingProps: margin, size: "m", spaceConfig: marginConfig, key: "margin" })}
 `;
 
-const StyledLabel = newStyled.label<{fontSize?: string, fontSizeConfig: SizeProps, customSize?: SizeType, colorConfig: ColorConfigType, colorFamily?: ColorFamilyType, color?: string}>`
+const StyledLabel = newStyled.label<{ fontSize?: string; fontSizeConfig: SizeProps; customSize?: SizeType; colorConfig: ColorConfigType; colorFamily?: ColorFamilyType; color?: string }>`
   margin-bottom: 0.5em;
   font-weight: 500;
   font-size: 0.9em;
@@ -71,12 +71,6 @@ const StyledLabel = newStyled.label<{fontSize?: string, fontSizeConfig: SizeProp
     return color ?? defaultColor
 }};
   ${({ fontSize, fontSizeConfig, customSize }) => getFontStyling({ size: customSize, fontSize, fontConfig: fontSizeConfig })}
-`;
-
-const StyledText = newStyled.div<{ isError?: boolean; colorConfig: ColorConfigType }>`
-  margin-top: 0.5em;
-  font-size: 0.8em;
-  color: ${({ isError, colorConfig }) => (isError ? colorConfig.danger : colorConfig.tertiary)};
 `;
 
 const StyledInputToggle = newStyled.div<DropdownStyleProps>`
@@ -98,7 +92,6 @@ const StyledInputToggle = newStyled.div<DropdownStyleProps>`
   width: 100%; /* Match the parent's width */
   box-sizing: border-box; /* Includes padding and border in width */
   cursor: pointer;
-  outline: none;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -115,7 +108,7 @@ const StyledDropdownOptions = newStyled.div<DropdownStyleProps>`
     colorConfig?.isDark ? colorConfig.backGround : colorConfig.foreGround};
   border-radius: ${({ borderRadius }) => borderRadius || "0.25em"};
   margin-top: 0.5em;
-  z-index: 10000;
+  z-index: 1000;
   width: 100%;
   max-height: 200px;
   overflow-y: auto;
@@ -133,14 +126,9 @@ const StyledOption = newStyled.div<{ isSelected?: boolean; colorConfig: ColorCon
   }
 `;
 
-const StyledPlaceholder = newStyled.span`
-    opacity: 0.5;
-`
-
 const Dropdown = React.memo((props: DropdownInputProps) => {
   const {
     label,
-    areaLabel,
     options = [],
     placeholder,
     value,
@@ -161,19 +149,29 @@ const Dropdown = React.memo((props: DropdownInputProps) => {
   const toggleRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-
   const paddingConfig = useContext(PaddingContext);
   const marginConfig = useContext(MarginContext);
   const fontSizeConfig = useContext(FontSizeContext);
   const colorConfig = useContext(ColorFamilyContext);
 
-  const handleToggle = () => {console.log(isOpen); setIsOpen(!isOpen)};
+  const handleToggle = useCallback(() => {
+    setIsOpen(!isOpen);
+  }, [isOpen]);
 
-  const handleSelect = (option: DropdownOption) => {
-    setSelectedValue(option.value);
-    setIsOpen(false);
-    if (onChange) onChange(option.value);
-  };
+  const handleSelect = useCallback(
+    (option: DropdownOption) => {
+      setSelectedValue(option.value);
+      setIsOpen(false);
+      onChange(option.value);
+    },
+    [onChange]
+  );
+
+  useEffect(() => {
+    if (value !== undefined) {
+      setSelectedValue(value);
+    }
+  }, [value]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -193,7 +191,17 @@ const Dropdown = React.memo((props: DropdownInputProps) => {
 
   return (
     <StyledDropdownWrapper marginConfig={marginConfig} {...rest}>
-      {label && <StyledLabel colorConfig={colorConfig} className={labelClass} fontSize={rest.fontSize} fontSizeConfig={fontSizeConfig} customSize={customSize}>{label}</StyledLabel>}
+      {label && (
+        <StyledLabel
+          colorConfig={colorConfig}
+          className={labelClass}
+          fontSize={rest.fontSize}
+          fontSizeConfig={fontSizeConfig}
+          customSize={customSize}
+        >
+          {label}
+        </StyledLabel>
+      )}
       <StyledInputToggle
         ref={toggleRef}
         onClick={handleToggle}
@@ -206,9 +214,12 @@ const Dropdown = React.memo((props: DropdownInputProps) => {
         colorConfig={colorConfig}
         {...rest}
       >
-        {selectedValue ? options.find(opt => opt.value === selectedValue)?.component ?? options.find(opt => opt.value === selectedValue)?.label : <StyledPlaceholder>{placeholder || "Select..."}</StyledPlaceholder>}
+        {selectedValue
+          ? options.find((opt) => opt.value === selectedValue)?.component ??
+            options.find((opt) => opt.value === selectedValue)?.label
+          : placeholder || "Select..."}
       </StyledInputToggle>
-      {isOpen && !!options.length &&  (
+      {isOpen && !!options.length && (
         <StyledDropdownOptions
           ref={dropdownRef}
           colorConfig={colorConfig}
@@ -218,7 +229,7 @@ const Dropdown = React.memo((props: DropdownInputProps) => {
           marginConfig={marginConfig}
           fontSizeConfig={fontSizeConfig}
         >
-          {options.map(option => (
+          {options.map((option) => (
             <StyledOption
               key={option.value}
               isSelected={selectedValue === option.value}
@@ -230,8 +241,16 @@ const Dropdown = React.memo((props: DropdownInputProps) => {
           ))}
         </StyledDropdownOptions>
       )}
-      {hasError && errorText && <StyledText className={errorClass} isError colorConfig={colorConfig}>{errorText}</StyledText>}
-      {!hasError && helpText && <StyledText className={helpClass} colorConfig={colorConfig}>{helpText}</StyledText>}
+      {hasError && errorText && (
+        <div className={errorClass} style={{ color: colorConfig.danger, fontSize: "0.8em" }}>
+          {errorText}
+        </div>
+      )}
+      {!hasError && helpText && (
+        <div className={helpClass} style={{ color: colorConfig.tertiary, fontSize: "0.8em" }}>
+          {helpText}
+        </div>
+      )}
     </StyledDropdownWrapper>
   );
 });
