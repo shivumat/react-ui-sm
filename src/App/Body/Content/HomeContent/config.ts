@@ -1,76 +1,52 @@
-import { ContentPropsTableProps } from "../Content";
 
-export const ButtonContentPropsConfig : ContentPropsTableProps = [
+export const taskData = [
     {
-        prop : 'label',
-        defaultValue : {value : ''},
-        valueType : {value : 'string'},
-        description : 'The text to display on the button. Required when children is not provided'
-    }
-    ,{
-        prop : 'size',
-        defaultValue : {value : 'm'},
-        valueType : {value : 'SizeProps' , link : '/sizing'},
-        description : 'Updates the default padding, margin and font-size of the button'
-    }
-    ,{
-        prop : 'children',
-        defaultValue : {value : ''},
-        valueType : {value : 'ReactNode'},
-        description : 'React children'
-    }
-    ,{
-        prop : 'trailingComp',
-        defaultValue : {value : ''},
-        valueType : {value : 'ReactNode'},
-        description : 'React component before the label'
-    }
-    ,{
-        prop : 'leadingComp',
-        defaultValue : {value : ''},
-        valueType : {value : 'ReactNode'},
-        description : 'React component after the label'
-    }
-    ,{
-        prop : 'fontSize',
-        defaultValue : {value : ''},
-        valueType : {value : 'string'},
-        description : 'font-size css value'
-    }
-    ,{
-        prop : 'padding',
-        defaultValue : {value : ''},
-        valueType : {value : 'SpacingProps' , link : '/spacing'},
-        description : 'Adjust the padding of the button'
-    }
-    ,{
-        prop : 'margin',
-        defaultValue : {value : ''},
-        valueType : {value : 'SpacingProps' , link : '/spacing'},
-        description : 'Adjust the margin of the button'
-    }
-    ,{
-        prop : 'bgColor',
-        defaultValue : {value : ''},
-        valueType : {value : 'string' },
-        description : 'Background color of the button'
-    }
-    ,{
-        prop : 'color',
-        defaultValue : {value : ''},
-        valueType : {value : 'string' },
-        description : 'Font color of the button'
-    }
-    ,{
-        prop : 'colorFamily',
-        defaultValue : {value : 'primary'},
-        valueType : {value : 'ColorProps', link : '/color'},
-        description : 'Select from predefined color families'
-    }
-    ,{
-        prop : 'variant',
-        defaultValue : {value : 'filled'},
-        valueType : {value : 'filled | outlined | subtle'},
-        description : 'Variant of the button'
-    }
-]
+      title: "Data Display Components",
+      description: "Showcase your data with tables, cards, lists, and more.",
+      subtasks: ["Table", "Card", "List", "Tree View", "Tooltip", "Popover", "Avatar Group"],
+    },
+    {
+      title: "Form Components",
+      description: "Collect and validate user inputs with flexible form controls.",
+      subtasks: [
+        "Input Fields",
+        "Dropdowns",
+        "Date Picker",
+        "Time Picker",
+        "Toggle Switch",
+        "Checkbox and Radio Buttons",
+        "Slider",
+        "File Uploader",
+      ],
+    },
+    {
+      title: "Interaction Components",
+      description: "Enhance user engagement with buttons, badges, and more.",
+      subtasks: ["Button", "Badge", "Stepper", "Drag-and-Drop", "Accordion"],
+    },
+    {
+      title: "Navigation Components",
+      description: "Guide users with intuitive navigation tools.",
+      subtasks: ["Navbar", "Sidebar", "Breadcrumb", "Tabs", "Pagination", "Menu"],
+    },
+    {
+      title: "Feedback Components",
+      description: "Provide feedback with modals, toasts, and banners.",
+      subtasks: ["Modal/Dialog", "Toast Notifications", "Alert Banner", "Progress Bar", "Snackbar"],
+    },
+    {
+      title: "Utility Components",
+      description: "Add essential functionality to your interfaces.",
+      subtasks: ["Skeleton Loader", "Spinner", "Avatar", "Tag", "Divider"],
+    },
+    {
+      title: "Charts and Boards",
+      description: "Visualize data with charts and organize tasks with boards.",
+      subtasks: ["Bar Chart", "Pie Chart", "Line Chart", "Kanban Board", "Activity Timeline"],
+    },
+    {
+      title: "Mixins",
+      description: "Streamline styling with reusable utilities.",
+      subtasks: ["Size Variants", "Color Families", "Typography", "Border Radius", "Box Shadows"],
+    },
+  ];

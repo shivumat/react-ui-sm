@@ -1,192 +1,49 @@
+// Customizable Component Library Landing Page
+import newStyled from "@emotion/styled";
 import React from "react";
 import TextComponent from "../../../../Components/Text";
+import { taskData } from "./config";
+import TaskCard from "./TaskCard";
 
-interface FeatureCardProps {
-  title: string;
-  description: string;
-}
 
-const FeatureCard: React.FC<FeatureCardProps> = ({ title, description }) => (
-  <div style={styles.featureCard}>
-    <TextComponent
-      label={title}
-      size="m"
-      fontSize="1.2em"
-      color="#333"
-      tag="h3"
-    />
-    <TextComponent
-      label={description}
-      size="s"
-      fontSize="1em"
-      color="#555"
-      tag="p"
-    />
-  </div>
-);
+const Section = newStyled.section`
+  padding: 2em 1em;
+  max-width: 1200px;
+  margin: 0 auto;
+`;
 
-const Home: React.FC = () => {
+const Tasks = newStyled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2em;
+  justify-content: space-around;
+`;
+
+const HomePage: React.FC = () => {
   return (
-    <div>
-      {/* Hero Section */}
-      {/* <header style={styles.header}>
+      <Section>
         <TextComponent
-          label="Unlock Infinite Possibilities"
-          size="xl"
-          fontSize="2em"
-          color="#fff"
-          tag="h1"
-        />
-        <TextComponent
-          label="Empowering developers to build unique, scalable, and accessible interfaces with ease."
-          size="l"
-          fontSize="1.2em"
-          color="#fff"
-          tag="p"
-        />
-        <div style={styles.ctaButtons}>
-          <button style={{ ...styles.button, ...styles.primary }}>
-            Get Started
-          </button>
-          <button style={{ ...styles.button, ...styles.secondary }}>
-            View Documentation
-          </button>
-          <button style={{ ...styles.button, ...styles.primary }}>
-            Explore Components
-          </button>
-        </div>
-      </header> */}
-
-      {/* Why Our Library */}
-      <section style={styles.section}>
-        <TextComponent
-          label="Why Our Library?"
-          size="l"
-          fontSize="1.8em"
-          color="#333"
+          label="Centralized Styling and Components for SaaS Platforms"
+          size="xxl"
           tag="h2"
         />
         <TextComponent
-          label="Built for Developers, Designed for Customization"
+          label="This project bridges the gap between designers and developers in SaaS platform creation by providing a comprehensive library of basic components with consistent styling and interaction decisions. Designers benefit from a streamlined design process with pre-built components that ensure uniformity across the platform. Developers gain centralized styling management via context-based configurations, reducing the need to pass repetitive props and enabling rapid implementation of desired designs with minimal effort. This approach fosters collaboration, speeds up development, and ensures a cohesive user experience."
           size="m"
-          fontSize="1.2em"
-          color="#555"
-          tag="p"
+          tag="h4"
         />
-        <div style={styles.features}>
-          <FeatureCard
-            title="Fully Customizable"
-            description="Tailor components to match your brand and user requirements."
-          />
-          <FeatureCard
-            title="Design System Integration"
-            description="A design system that adapts seamlessly to your needs."
-          />
-          <FeatureCard
-            title="High Performance"
-            description="Optimized for modern web and mobile applications."
-          />
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section style={styles.section}>
-        <TextComponent
-          label="Your Design. Your Rules."
-          size="l"
-          fontSize="1.8em"
-          color="#333"
-          tag="h2"
-        />
-        <TextComponent
-          label="Explore the features that make our component library stand out:"
-          size="m"
-          fontSize="1.2em"
-          color="#555"
-          tag="p"
-        />
-        <div style={styles.features}>
-          <FeatureCard
-            title="Theming Support"
-            description="Light, Dark, and Custom Themes with granular control."
-          />
-          <FeatureCard
-            title="Accessibility First"
-            description="WCAG-compliant components for an inclusive user experience."
-          />
-          <FeatureCard
-            title="Modular Architecture"
-            description="Pick and use only what you need to keep things lightweight."
-          />
-        </div>
-      </section>
-
-      {/* Footer */}
-      {/* <footer style={styles.footer}>
-        <TextComponent
-          label="© 2025 Your Component Library. All rights reserved."
-          size="m"
-          fontSize="1em"
-          color="#fff"
-          tag="p"
-        />
-      </footer> */}
-    </div>
+        <Tasks>
+          {taskData.map((task, index) => (
+            <TaskCard
+              key={index}
+              title={task.title}
+              description={task.description}
+              subtasks={task.subtasks}
+            />
+          ))}
+        </Tasks>
+      </Section>
   );
 };
 
-const styles = {
-  header: {
-    textAlign: "center" as const,
-    background: "#4CAF50",
-    color: "white",
-    padding: "2em 1em",
-  },
-  ctaButtons: {
-    marginTop: "2em",
-  },
-  button: {
-    textDecoration: "none",
-    margin: "0.5em",
-    padding: "0.8em 2em",
-    borderRadius: "5px",
-    color: "white",
-    fontWeight: "bold",
-    border: "none",
-    cursor: "pointer",
-  },
-  primary: {
-    background: "#007BFF",
-  },
-  secondary: {
-    background: "#6C757D",
-  },
-  section: {
-    padding: "2em 1em",
-    maxWidth: "1200px",
-    margin: "0 auto",
-  },
-  features: {
-    display: "flex",
-    flexWrap: "wrap" as const,
-    gap: "2em",
-    justifyContent: "center",
-  },
-  featureCard: {
-    flex: "1",
-    minWidth: "280px",
-    padding: "1em",
-    border: "1px solid #ddd",
-    borderRadius: "8px",
-    textAlign: "center" as const,
-    margin: "1em",
-  },
-  footer: {
-    textAlign: "center" as const,
-    padding: "2em 1em",
-    background: "#333",
-    color: "white",
-  },
-};
-
-export default Home;
+export default HomePage;
