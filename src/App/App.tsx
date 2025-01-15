@@ -17,8 +17,7 @@ const App = (props : {setIsDarkMode: React.Dispatch<React.SetStateAction<boolean
             <Header setIsDarkMode={props.setIsDarkMode}/>
             <BrowserRouter>
                 <Routes>
-                <Route path="/" element={<Body />} />
-                <Route path="/:id" element={<Body />} />
+                    <Route path="/:id?" element={<Body />} />
                 </Routes>
             </BrowserRouter>
         </AppContainer>

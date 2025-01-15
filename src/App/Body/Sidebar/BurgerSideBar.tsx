@@ -1,10 +1,7 @@
 import newStyled from '@emotion/styled';
 import { useContext, useState } from 'react';
-import { useNavigate } from 'react-router';
-import AccordionList from '../../../Components/AccordionList';
-import { AccordionItemProps } from '../../../Components/AccordionList/AccordionList';
 import { ColorFamilyContext } from '../../../Mixins/context';
-import { routesConfig } from '../config';
+import SidebarAcordion from './SidebarAccordion';
 
 const SidebarContainer = newStyled.div<{ isOpen: boolean; isDark: boolean; foregroundColor: string; backgroundColor: string }>`
   position: fixed;
@@ -50,28 +47,13 @@ const ChevronIcon = newStyled.div<{ isDark: boolean; foregroundColor: string; ba
   color: ${({ isDark, foregroundColor, backgroundColor }) => (isDark ? foregroundColor : backgroundColor)};;
 `;
 
-const Sidebar = () => {
+const BurgerSidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
   const colorConfig = useContext(ColorFamilyContext);
 
   const toggleSidebar = () => setIsOpen(!isOpen);
 
   
-  const accordionroutes : AccordionItemProps[] = routesConfig.map((item) => {
-    return {
-      label: item.label,
-      onClick: () => navigate(`${item.path ?? ''}`, { replace: true }),
-      isOpen: false,
-      items: item.children?.map((child) => {
-        return {
-          label: child.label,
-          onClick: () => navigate(`${item.path ?? ''}`, { replace: true }),
-          isOpen: false,
-        };
-      }),
-    };
-  })
 
   return (
     <>
@@ -90,10 +72,10 @@ const Sidebar = () => {
         foregroundColor={colorConfig.foreGround}
         backgroundColor={colorConfig.backGround}
       >
-        <AccordionList items={accordionroutes} />
+        <SidebarAcordion />
       </SidebarContainer>
     </>
   );
 };
 
-export default Sidebar;
+export default BurgerSidebar;
