@@ -12,14 +12,12 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ title, description }) => (
       label={title}
       size="m"
       fontSize="1.2em"
-      color="#333"
       tag="h3"
     />
     <TextComponent
       label={description}
       size="s"
       fontSize="1em"
-      color="#555"
       tag="p"
     />
   </div>
@@ -63,14 +61,12 @@ const Home: React.FC = () => {
           label="Why Our Library?"
           size="l"
           fontSize="1.8em"
-          color="#333"
           tag="h2"
         />
         <TextComponent
           label="Built for Developers, Designed for Customization"
           size="m"
           fontSize="1.2em"
-          color="#555"
           tag="p"
         />
         <div style={styles.features}>
@@ -95,14 +91,12 @@ const Home: React.FC = () => {
           label="Your Design. Your Rules."
           size="l"
           fontSize="1.8em"
-          color="#333"
           tag="h2"
         />
         <TextComponent
           label="Explore the features that make our component library stand out:"
           size="m"
           fontSize="1.2em"
-          color="#555"
           tag="p"
         />
         <div style={styles.features}>
