@@ -1,8 +1,7 @@
 import newStyled from '@emotion/styled';
-import { useNavigate } from 'react-router';
-import Button from '../../../Components/Inputs/Button';
-import { routesConfig } from '../config';
-// import { NavBar } from '../../../Components/Navigation/NavbarTopBar'
+import { useLocation, useNavigate } from 'react-router';
+import { NavBar } from '@/Components/Navigation/NavbarTopBar';
+import { navItems, validPaths } from '../config';
 import { useStyleSystem } from "@/Mixins/context";
 import { getBorderColor, getSurfaceColor } from "@/Mixins/Color";
 
@@ -18,16 +17,19 @@ const SidebarContainer = newStyled.div<{borderColor: string; surfaceColor: strin
 
 const Sidebar = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const colorConfig = useStyleSystem().colors
+    const rawPathId = location.pathname.replace(/^\/+/, '')
+    const pathId = validPaths.includes(rawPathId) ? rawPathId : ''
   
     return (
       <SidebarContainer borderColor={getBorderColor(colorConfig)} surfaceColor={getSurfaceColor(colorConfig)}>
-        {routesConfig.map(route => <Button variant='subtle' label={route.label} onClick={() => navigate(`/${route.path ?? ''}`, { replace: true })}/>)}
-        {/* <NavBar
+        <NavBar
             items={navItems}
             layout="sidebar"
-            onChange={(key) => navigate(key, { replace: true })}
-          /> */}
+            activeKey={pathId}
+            onChange={(key) => navigate(key ? `/${key}` : '/', { replace: true })}
+          />
       </SidebarContainer>
     )
 }

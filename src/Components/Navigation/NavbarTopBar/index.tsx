@@ -1,61 +1,88 @@
-// NavBar.tsx
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import React, { useState } from 'react';
-import { getBorderColor } from "@/Mixins/Color";
-import { useStyleSystem } from "@/Mixins/context";
+import React, { useEffect, useMemo, useState } from 'react';
+import { getActiveOptionBackgroundColor, getBorderColor, getReadableTextOnColor, getTextColor } from '@/Mixins/Color';
+import { useStyleSystem } from '@/Mixins/context';
 import { NavBarProps, NavItem } from './Navbar';
 
-/* ------------------ Emotion Styled Components ------------------ */
-
 const Container = styled.nav<{ layout: 'tabs' | 'sidebar'; borderColor: string }>`
-  ${({ layout }) =>
+  ${({ layout, borderColor }) =>
     layout === 'tabs'
       ? css`
           display: flex;
-          border-bottom: 1px solid var(--nav-border);
+          border-bottom: 1px solid ${borderColor};
         `
       : css`
-          width: 250px;
-          border-right: 1px solid var(--nav-border);
+          width: 100%;
+          border-right: 1px solid ${borderColor};
+          overflow-y: auto;
         `}
-  --nav-border: ${({borderColor}) => borderColor};
-
-  /* Merge default styles with any custom container style */
 `;
 
-const List = styled.ul`
-  /* Merge default styles with custom list style */
+const List = styled.ul<{ level: number }>`
+  margin: 0;
+  padding: ${({ level }) => (level === 0 ? '8px' : '4px 0 4px 14px')};
 `;
 
-const Item = styled.li<{
-  isActive?: boolean;
+const Item = styled.li`
+  list-style: none;
+`;
+
+const ItemLabel = styled.button<{
+  isActive: boolean;
+  activeBackground: string;
+  activeText: string;
+  textColor: string;
+  level: number;
 }>`
-  /* Merge default item styles with any custom style or active style */
-  list-style-type: none;
-`;
-
-const ItemLabel = styled.div`
-    display: flex;
-  /* Label wrapper (text + arrow / expand icon) */
+  width: 100%;
+  border: 0;
+  background: ${({ isActive, activeBackground }) => (isActive ? activeBackground : 'transparent')};
+  color: ${({ isActive, activeText, textColor }) => (isActive ? activeText : textColor)};
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  padding: ${({ level }) => `8px ${8 + Math.max(0, level - 1) * 8}px`};
+  border-radius: 8px;
+  cursor: pointer;
 `;
 
 const ItemIcon = styled.span`
-  /* Icon area */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Arrow = styled.span`
-  /* Arrow for indicating children expansion */
   font-size: 12px;
+  width: 12px;
+  flex: 0 0 12px;
 `;
 
-const NestedList = styled.ul`
-  /* For nested children */
-  list-style-type: none;
+const LabelText = styled.span`
+  flex: 1;
 `;
 
-/* ------------------ NavBar Component ------------------ */
+const findAncestorKeys = (items: NavItem[], targetKey?: string): string[] => {
+  if (!targetKey) return [];
+
+  const visit = (nodes: NavItem[], parents: string[]): string[] | null => {
+    for (const node of nodes) {
+      if (node.key === targetKey) {
+        return parents;
+      }
+      if (node.children?.length) {
+        const result = visit(node.children, [...parents, node.key]);
+        if (result) return result;
+      }
+    }
+    return null;
+  };
+
+  return visit(items, []) ?? [];
+};
 
 export const NavBar: React.FC<NavBarProps> = ({
   items,
@@ -63,55 +90,57 @@ export const NavBar: React.FC<NavBarProps> = ({
   activeKey,
   onChange,
 }) => {
-  const colorConfig = useStyleSystem().colors
-  const [openKeys, setOpenKeys] = useState<string[]>([]);
-  const [currentKey, setCurrentKey] = useState<string | undefined>(activeKey);
+  const colorConfig = useStyleSystem().colors;
+  const activeBackground = getActiveOptionBackgroundColor({ colorConfig });
+  const activeText = getReadableTextOnColor(activeBackground, colorConfig);
+  const textColor = getTextColor(colorConfig);
+  const borderColor = getBorderColor(colorConfig);
+
+  const ancestorKeys = useMemo(() => findAncestorKeys(items, activeKey), [activeKey, items]);
+  const [openKeys, setOpenKeys] = useState<string[]>(ancestorKeys);
+
+  useEffect(() => {
+    setOpenKeys((prev) => Array.from(new Set([...prev, ...ancestorKeys])));
+  }, [ancestorKeys]);
 
   const handleItemClick = (key: string, hasChildren: boolean) => {
     if (hasChildren) {
       setOpenKeys((prev) =>
-        prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
+        prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key],
       );
-    } else {
-      setCurrentKey(key);
-      onChange?.(key);
+      return;
     }
+
+    onChange?.(key);
   };
 
-  const renderItems = (navItems: NavItem[], level: number = 0): React.ReactNode => {
+  const renderItems = (navItems: NavItem[], level = 0): React.ReactNode => {
     return (
-      <List>
+      <List level={level}>
         {navItems.map((item) => {
-          const isActive = currentKey === item.key;
           const hasChildren = !!item.children?.length;
-          console.log(openKeys)
-          const isOpen = openKeys.includes(item.key);
+          const isActive = activeKey === item.key;
+          const isOpen = hasChildren && openKeys.includes(item.key);
 
           return (
-            <Item
-              key={item.key}
-              isActive={isActive}
-              onClick={() => {
-                item.onClick?.();
-                handleItemClick(item.key, hasChildren);
-              }}
-            >
-              <ItemLabel >
-                {hasChildren && (
-                  <Arrow >
-                    {isOpen ? '▼' : '▶'}
-                  </Arrow>
-                )}
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  {item.icon && <ItemIcon >{item.icon}</ItemIcon>}
-                  <span>{item.label}</span>
-                </div>
+            <Item key={item.key}>
+              <ItemLabel
+                type="button"
+                isActive={isActive}
+                activeBackground={activeBackground}
+                activeText={activeText}
+                textColor={textColor}
+                level={level}
+                onClick={() => {
+                  item.onClick?.();
+                  handleItemClick(item.key, hasChildren);
+                }}
+              >
+                {hasChildren ? <Arrow>{isOpen ? '▼' : '▶'}</Arrow> : <Arrow />}
+                {item.icon && <ItemIcon>{item.icon}</ItemIcon>}
+                <LabelText>{item.label}</LabelText>
               </ItemLabel>
-              {item.children && isOpen && (
-                    <NestedList >
-                    {renderItems(item.children!, level + 1)}
-                    </NestedList>
-                )}
+              {hasChildren && isOpen && renderItems(item.children!, level + 1)}
             </Item>
           );
         })}
@@ -120,7 +149,7 @@ export const NavBar: React.FC<NavBarProps> = ({
   };
 
   return (
-    <Container layout={layout} borderColor={getBorderColor(colorConfig)} >
+    <Container layout={layout} borderColor={borderColor}>
       {renderItems(items)}
     </Container>
   );

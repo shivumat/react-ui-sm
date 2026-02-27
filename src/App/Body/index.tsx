@@ -1,8 +1,8 @@
 import newStyled from '@emotion/styled';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import BurgerSidebar from './BurgerSidebar';
-import { routesConfig } from './config';
+import { validPaths } from './config';
 import Content from './Content';
 import Sidebar from './Sidebar';
 
@@ -30,21 +30,22 @@ const useIsMobile = () => {
 };
 
 const Body = () => {
-  const { id } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const rawPathId = location.pathname.replace(/^\/+/, '');
+  const pathId = validPaths.includes(rawPathId) ? rawPathId : '';
 
-  const redirectToHome = async () => {
-    window.location.href = '/';
-  };
-
-  if (id && routesConfig.map((route) => route.path).indexOf(id) === -1) {
-    redirectToHome();
-  }
+  useEffect(() => {
+    if (rawPathId !== pathId) {
+      navigate('/', { replace: true });
+    }
+  }, [navigate, pathId, rawPathId]);
 
   return (
     <BodyContainer isMobile={isMobile}>
       {isMobile ? <BurgerSidebar /> : <Sidebar />}
-      <Content pathId={id} />
+      <Content pathId={pathId} />
     </BodyContainer>
   );
 };

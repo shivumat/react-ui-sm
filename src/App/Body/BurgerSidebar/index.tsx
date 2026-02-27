@@ -1,9 +1,9 @@
 import newStyled from '@emotion/styled';
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
-import Button from '../../../Components/Inputs/Button';
+import { useLocation, useNavigate } from 'react-router';
+import { NavBar } from '@/Components/Navigation/NavbarTopBar';
 import { useStyleSystem } from "@/Mixins/context";
-import { routesConfig } from '../config';
+import { navItems, validPaths } from '../config';
 import { getBorderColor, getSurfaceColor, getTextColor } from "@/Mixins/Color";
 
 const SidebarContainer = newStyled.div<{ isOpen: boolean; surfaceColor: string; borderColor: string }>`
@@ -53,10 +53,13 @@ const ChevronIcon = newStyled.div<{ iconColor: string }>`
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const colorConfig = useStyleSystem().colors;
   const surfaceColor = getSurfaceColor(colorConfig);
   const textColor = getTextColor(colorConfig);
   const borderColor = getBorderColor(colorConfig);
+  const rawPathId = location.pathname.replace(/^\/+/, '');
+  const pathId = validPaths.includes(rawPathId) ? rawPathId : '';
 
   const toggleSidebar = () => setIsOpen(!isOpen);
 
@@ -72,17 +75,15 @@ const Sidebar = () => {
         surfaceColor={surfaceColor}
         borderColor={borderColor}
       >
-        {routesConfig.map((route) => (
-          <Button
-            key={route.path}
-            variant="subtle"
-            label={route.label}
-            onClick={() => {
-              navigate(`/${route.path ?? ''}`, { replace: true });
-              toggleSidebar(); // Close sidebar after navigation
-            }}
-          />
-        ))}
+        <NavBar
+          items={navItems}
+          layout="sidebar"
+          activeKey={pathId}
+          onChange={(key) => {
+            navigate(key ? `/${key}` : '/', { replace: true });
+            toggleSidebar();
+          }}
+        />
       </SidebarContainer>
     </>
   );

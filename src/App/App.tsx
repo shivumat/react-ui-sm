@@ -13,15 +13,14 @@ const AppContainer = newStyled(ContainerComponent)`
 const App = (props : {setIsDarkMode: React.Dispatch<React.SetStateAction<boolean>>}) => {
 
     return (
+            <BrowserRouter>
         <AppContainer padding={{all : '0px'}} margin={{all : '0px'}}>
             <Header setIsDarkMode={props.setIsDarkMode}/>
-            <BrowserRouter>
                 <Routes>
-                <Route path="/" element={<Body />} />
-                <Route path="/:id" element={<Body />} />
+                <Route path="/*" element={<Body />} />
                 </Routes>
-            </BrowserRouter>
         </AppContainer>
+            </BrowserRouter>
     )
 }
 
