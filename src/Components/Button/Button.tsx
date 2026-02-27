@@ -1,6 +1,6 @@
 import newStyled from "@emotion/styled";
 import { ButtonHTMLAttributes, DetailedHTMLProps } from "react";
-import { ColorConfigType, ColorFamilyType, darken, getColor, lighten } from "../../Mixins/Color";
+import { ColorConfigType, ColorFamilyType, darken, getBorderColor, getColor, getSurfaceColor, getTextColor, lighten } from "../../Mixins/Color";
 import { getFontStyling } from "../../Mixins/Font";
 import { SizeProps, SizeType } from "../../Mixins/Size";
 import { getSpacing, SpacingProps } from "../../Mixins/Spacing";
@@ -59,13 +59,13 @@ export const StyledButton = newStyled.button<ButtonStyleProps>`
     getSpacing({ spacingProps: margin, size, spaceConfig: marginConfig, key: "margin" })}
   ${({ size, fontSize, fontSizeConfig }) => getFontStyling({ size, fontSize, fontConfig: fontSizeConfig })}
   ${({ bgColor, variant = "filled", colorConfig, colorFamily, disabled }) =>
-    variant !== "subtle" ? `outline: 1px solid ${getColor({ colorFamily, color: bgColor, colorConfig, disabled })};` : ""}
+    variant !== "subtle" ? `outline: 1px solid ${getColor({ colorFamily, color: bgColor, colorConfig, disabled })};` : `outline: 1px solid ${getBorderColor(colorConfig)};`}
 
   background-color: ${({ bgColor, variant = "filled", colorConfig, colorFamily, disabled }) =>
     getBGColor(colorConfig, bgColor, variant, colorFamily, disabled)};
   color: ${({ colorFamily, variant = "filled", color, colorConfig, disabled }) => {
-    const foreGroundColor = colorConfig.isDark ? colorConfig.backGround : colorConfig.foreGround;
-    const diasabledColor = colorConfig.isDark ? colorConfig.foreGround : colorConfig.backGround;
+    const foreGroundColor = getTextColor(colorConfig);
+    const diasabledColor = getSurfaceColor(colorConfig);
     if (variant === "subtle") return !disabled ? foreGroundColor : `${colorConfig?.disable}`;
     return variant === "filled" ? diasabledColor : getColor({ colorFamily, color, colorConfig, disabled });
   }};
@@ -75,14 +75,14 @@ export const StyledButton = newStyled.button<ButtonStyleProps>`
   ${({ disabled, colorConfig }) => (!disabled ? "cursor: pointer;" : `opacity: ${colorConfig.isDark ? '0.4' : '1' };`)}
   &:hover {
     background-color: ${({ bgColor, variant = "filled", colorConfig, colorFamily, disabled }) => {
-      const backGroundColor = colorConfig.isDark ? colorConfig.foreGround : colorConfig.backGround;
+      const backGroundColor = getSurfaceColor(colorConfig);
       if (variant !== "filled") return colorConfig.isDark ? lighten(disabled ? 0 : 40, backGroundColor) : darken(disabled ? 0 : 5, backGroundColor);
       return lighten(disabled ? 0 : 10, getColor({ color: bgColor, colorConfig, colorFamily, disabled }));
     }};
   }
   &:active {
     background-color: ${({ bgColor, variant = "filled", colorConfig, colorFamily, disabled }) => {
-      const backGroundColor = colorConfig.isDark ? colorConfig.foreGround : colorConfig.backGround;
+      const backGroundColor = getSurfaceColor(colorConfig);
       if (variant !== "filled") return colorConfig.isDark ? lighten(disabled ? 0 : 20, backGroundColor) : darken(disabled ? 0 : 10, backGroundColor);
       return darken(disabled ? 0 : 10, getColor({ color: bgColor, colorConfig, colorFamily, disabled }));
     }};

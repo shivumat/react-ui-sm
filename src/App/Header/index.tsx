@@ -3,10 +3,11 @@ import ContainerComponent from '../../Components/Container';
 import TextComponent from '../../Components/Text';
 import ToggleButton from '../../Components/ToggleButton';
 import { useStyleSystem } from '../../Mixins/context';
+import { getBorderColor } from '../../Mixins/Color';
 
-const HeaderContainer = newStyled(ContainerComponent)<{isDark : boolean, foregroundColor: string, backgroundColor: string}>`
+const HeaderContainer = newStyled(ContainerComponent)<{borderColor: string}>`
     height : 60px;
-    outline : 1px solid ${({backgroundColor, foregroundColor, isDark}) => isDark ? backgroundColor : foregroundColor}33;
+    outline : 1px solid ${({borderColor}) => borderColor};
 `
 
 const Header = (props : {setIsDarkMode: React.Dispatch<React.SetStateAction<boolean>>}) => {
@@ -20,12 +21,10 @@ const Header = (props : {setIsDarkMode: React.Dispatch<React.SetStateAction<bool
       margin={{all: '0px'}}
       padding={{x: '20px'}}
       alignItems='center'
-      isDark={colorConfig.isDark} 
-      foregroundColor={colorConfig.foreGround} 
-      backgroundColor={colorConfig.backGround}
+      borderColor={getBorderColor(colorConfig)}
     >
         <TextComponent size='xl' label='SMUI' margin={{all: '0px'}}/>
-        <ToggleButton isOn={colorConfig.isDark} onToggle={() => props.setIsDarkMode((prev) => !prev)}/>
+        <ToggleButton isOn={colorConfig.isDark} onToggle={(nextState) => props.setIsDarkMode(nextState)}/>
     </HeaderContainer>
   )
 }

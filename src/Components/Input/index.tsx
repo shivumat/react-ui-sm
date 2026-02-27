@@ -1,7 +1,7 @@
 // Customizable TextInput.tsx
 import newStyled from "@emotion/styled";
 import React, { DetailedHTMLProps, InputHTMLAttributes } from "react";
-import { ColorConfigType, ColorFamilyType, getColor } from "../../Mixins/Color";
+import { ColorConfigType, ColorFamilyType, getBorderColor, getColor, getSurfaceColor, getTextColor } from "../../Mixins/Color";
 import { getFontStyling } from "../../Mixins/Font";
 import { SizeProps, SizeType } from "../../Mixins/Size";
 import { getSpacing, SpacingProps } from "../../Mixins/Spacing";
@@ -60,7 +60,7 @@ const StyledLabel = newStyled.label<{fontSize?: string, fontSizeConfig: SizeProp
   font-weight: 500;
   font-size: 0.9em;
   color: ${({ color, colorConfig, colorFamily }) =>{
-    const defaultColor = colorFamily ? getColor({ colorFamily, color, colorConfig, disabled : false }) : (colorConfig?.isDark ? colorConfig.backGround : colorConfig?.foreGround);
+    const defaultColor = colorFamily ? getColor({ colorFamily, color, colorConfig, disabled : false }) : getTextColor(colorConfig);
     return color ?? defaultColor
   }};
   ${({ fontSize, fontSizeConfig, customSize }) => getFontStyling({ size : customSize, fontSize, fontConfig: fontSizeConfig })}
@@ -77,19 +77,19 @@ const StyledInput = newStyled.input<TextInputStyleProps>`
     getSpacing({ spacingProps: padding, size: customSize, spaceConfig: paddingConfig, key: "padding" })}
   ${({ customSize, fontSize, fontSizeConfig }) => getFontStyling({ size: customSize, fontSize, fontConfig: fontSizeConfig })}
   background-color: ${({ bgColor, disabled, colorConfig }) =>{
-    const diasabledColor = colorConfig.isDark ? colorConfig.foreGround : colorConfig.backGround;
-    return disabled ? diasabledColor : bgColor || (colorConfig?.isDark ? colorConfig.foreGround : colorConfig?.backGround)
+    const disabledColor = getSurfaceColor(colorConfig);
+    return disabled ? disabledColor : bgColor || getSurfaceColor(colorConfig)
 }};
   color: ${({ color, colorConfig, disabled, colorFamily }) =>{
-    const diasabledColor = colorConfig.isDark ? colorConfig.foreGround : colorConfig.backGround;
-    const defaultColor = colorFamily ? getColor({ colorFamily, color, colorConfig, disabled }) : (colorConfig?.isDark ? colorConfig.backGround : colorConfig?.foreGround);
-    return disabled ? diasabledColor : color ?? defaultColor
+    const disabledColor = getTextColor(colorConfig);
+    const defaultColor = colorFamily ? getColor({ colorFamily, color, colorConfig, disabled }) : getTextColor(colorConfig);
+    return disabled ? disabledColor : color ?? defaultColor
 }};
   border: ${({ outlined = true, borderColor, hasError, onErrorBorderColor, colorConfig }) =>
       hasError
         ? `1px solid ${onErrorBorderColor || colorConfig?.danger}`
         : outlined
-        ? `1px solid ${borderColor || (colorConfig?.isDark ? colorConfig.backGround : colorConfig?.foreGround)}`
+        ? `1px solid ${borderColor || getBorderColor(colorConfig, 0.45)}`
         : "none"};
   border-radius: 0.25em;
   width: 100%;
@@ -98,13 +98,13 @@ const StyledInput = newStyled.input<TextInputStyleProps>`
     border-color: ${({ hasError, onErrorBorderColor, onFocusBorderColor, colorFamily, color, colorConfig, disabled }) =>
       hasError
         ? onErrorBorderColor || colorConfig?.danger
-        : onFocusBorderColor || colorFamily ? getColor({ colorFamily, color, colorConfig, disabled }) : (colorConfig?.isDark ? colorConfig.backGround : colorConfig?.foreGround)};
+        : onFocusBorderColor || colorFamily ? getColor({ colorFamily, color, colorConfig, disabled }) : getTextColor(colorConfig)};
   }
   &:hover {
     border-color: ${({ hasError, onErrorBorderColor, onBlurBorderColor, colorFamily, color, colorConfig, disabled }) =>
       hasError
         ? onErrorBorderColor || colorConfig?.danger
-        : onBlurBorderColor || colorFamily ? getColor({ colorFamily, color, colorConfig, disabled }) : (colorConfig?.isDark ? colorConfig.backGround : colorConfig?.foreGround)};
+        : onBlurBorderColor || colorFamily ? getColor({ colorFamily, color, colorConfig, disabled }) : getTextColor(colorConfig)};
   }
 `;
 

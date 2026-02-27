@@ -1,5 +1,6 @@
 import newStyled from '@emotion/styled';
 import { useStyleSystem } from '../../Mixins/context';
+import { getTextColor } from '../../Mixins/Color';
 
 export type LoadingSpinnerProps = {
     loaderWidth?: number
@@ -44,7 +45,7 @@ const LoadingSpinner = (props : LoadingSpinnerProps) => {
 
     const colorConfig = useStyleSystem().colors
 
-    const {loaderWidth = 2, width , height, color = colorConfig.isDark ? colorConfig.foreGround : colorConfig.backGround} = props
+    const {loaderWidth = 2, width , height, color = getTextColor(colorConfig)} = props
 
     return (
         <LoadingSpinnerContainer width={width} height={height} loaderWidth={loaderWidth} color={color}>

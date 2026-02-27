@@ -3,21 +3,24 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import React, { useState } from 'react';
+import { getBorderColor } from '../../Mixins/Color';
+import { useStyleSystem } from '../../Mixins/context';
 import { NavBarProps, NavItem } from './Navbar';
 
 /* ------------------ Emotion Styled Components ------------------ */
 
-const Container = styled.nav<{ layout: 'tabs' | 'sidebar' }>`
+const Container = styled.nav<{ layout: 'tabs' | 'sidebar'; borderColor: string }>`
   ${({ layout }) =>
     layout === 'tabs'
       ? css`
           display: flex;
-          border-bottom: 1px solid #ddd;
+          border-bottom: 1px solid var(--nav-border);
         `
       : css`
           width: 250px;
-          border-right: 1px solid #ddd;
+          border-right: 1px solid var(--nav-border);
         `}
+  --nav-border: ${({borderColor}) => borderColor};
 
   /* Merge default styles with any custom container style */
 `;
@@ -60,6 +63,7 @@ export const NavBar: React.FC<NavBarProps> = ({
   activeKey,
   onChange,
 }) => {
+  const colorConfig = useStyleSystem().colors
   const [openKeys, setOpenKeys] = useState<string[]>([]);
   const [currentKey, setCurrentKey] = useState<string | undefined>(activeKey);
 
@@ -116,7 +120,7 @@ export const NavBar: React.FC<NavBarProps> = ({
   };
 
   return (
-    <Container layout={layout} >
+    <Container layout={layout} borderColor={getBorderColor(colorConfig)} >
       {renderItems(items)}
     </Container>
   );

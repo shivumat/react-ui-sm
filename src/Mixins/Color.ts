@@ -41,6 +41,18 @@ export const getColor = (info : {colorFamily?: ColorFamilyType; color?: string; 
     if (disabled) return `${colorConfig?.disable}`
     return `${color ?? colorConfig?.[colorFamily]}`
 }
+
+export const getSurfaceColor = (colorConfig: ColorConfigType) => {
+    return colorConfig.backGround
+}
+
+export const getTextColor = (colorConfig: ColorConfigType) => {
+    return colorConfig.foreGround
+}
+
+export const getBorderColor = (colorConfig: ColorConfigType, alpha: number = 0.2) => {
+    return tinycolor(colorConfig.foreGround).setAlpha(alpha).toRgbString()
+}
  
 // --------------------------------------------------------------------------------------------------------------------
 // Helper Functions for Color Manipulation

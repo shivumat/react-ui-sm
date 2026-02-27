@@ -4,13 +4,15 @@ import Button from '../../../Components/Button';
 import { routesConfig } from '../config';
 // import { NavBar } from '../../../Components/Navbar'
 import { useStyleSystem } from '../../../Mixins/context';
+import { getBorderColor, getSurfaceColor } from '../../../Mixins/Color';
 
-const SidebarContainer = newStyled.div<{isDark : boolean, foregroundColor: string, backgroundColor: string}>`
+const SidebarContainer = newStyled.div<{borderColor: string; surfaceColor: string}>`
     display: flex;
     flex-direction: column;
     height : 100%;
     width : 100%;
-    border-right : 1px solid  ${({backgroundColor, foregroundColor, isDark}) => isDark ? backgroundColor : foregroundColor}33;
+    background-color: ${({surfaceColor}) => surfaceColor};
+    border-right : 1px solid ${({borderColor}) => borderColor};
     overflow-y: auto;
 `
 
@@ -19,7 +21,7 @@ const Sidebar = () => {
     const colorConfig = useStyleSystem().colors
   
     return (
-      <SidebarContainer isDark={colorConfig.isDark} foregroundColor={colorConfig.foreGround} backgroundColor={colorConfig.backGround}>
+      <SidebarContainer borderColor={getBorderColor(colorConfig)} surfaceColor={getSurfaceColor(colorConfig)}>
         {routesConfig.map(route => <Button variant='subtle' label={route.label} onClick={() => navigate(`/${route.path ?? ''}`, { replace: true })}/>)}
         {/* <NavBar
             items={navItems}

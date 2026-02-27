@@ -1,6 +1,8 @@
 import newStyled from "@emotion/styled";
 import React from "react";
 import CardComponent from "../../../Components/Card";
+import { getBorderColor, getTextColor } from "../../../Mixins/Color";
+import { useStyleSystem } from "../../../Mixins/context";
 
 export const ContentCard = newStyled(CardComponent)`
     display: flex;
@@ -22,7 +24,7 @@ export const ContentBody = newStyled.div`
     // border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 `
 
-export const CodeBlock = newStyled.code`
+export const CodeBlock = newStyled.code<{borderColor?: string}>`
     flex-grow: 1;
     margin: 1em;
     flex-wrap: wrap;
@@ -34,7 +36,7 @@ export const CodeBlock = newStyled.code`
     padding: 0.2em 0.4em; /* Add padding for spacing */
     font-size: 0.95em; /* Slightly smaller than normal text */
     border-radius: 0.5em; /* Rounded corners for a soft look */
-    border: 1px solid #e1e4e8; /* Subtle border */
+    border: 1px solid ${({borderColor}) => borderColor ?? '#e1e4e8'}; /* Subtle border */
     white-space: nowrap; /* Prevent wrapping */
     display: inline-block; /* Ensure inline-block behavior */
     padding: 1em;
@@ -52,34 +54,35 @@ export const ContentBlock = newStyled.div`
     border-radius: 0.5em; /* Rounded corners for a soft look */
 `
 
-const ContentPropsTable = newStyled.div`
+const ContentPropsTable = newStyled.div<{borderColor: string}>`
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1.5fr;
     overflow: hidden;
     margin: 1em 10%;
     border-radius: 0.5em;
-    border-left: 1px solid rgba(0, 0, 0, 0.1);
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-left: 1px solid ${({borderColor}) => borderColor};
+    border-top: 1px solid ${({borderColor}) => borderColor};
     overflow: auto;
 `
-const ContentPropsTableCell = newStyled.div`
+const ContentPropsTableCell = newStyled.div<{borderColor: string; backgroundColor: string; textColor: string}>`
     display: flex;
     padding: 0.5em;
-    border-right: 1px solid rgba(0, 0, 0, 0.1);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-right: 1px solid ${({borderColor}) => borderColor};
+    border-bottom: 1px solid ${({borderColor}) => borderColor};
     text-align: center;
     align-items: center;
     justify-content: center;
-    background-color: #f8f8f8;
+    background-color: ${({backgroundColor}) => backgroundColor};
+    color: ${({textColor}) => textColor};
     font-family: 'Fira Code', 'Courier New', monospace; /* Use a modern coding font !important */
     >a {
         font-family: 'Fira Code', 'Courier New', monospace; /* Use a modern coding font !important */
-        color: #3498db;
+        color: ${({textColor}) => textColor};
     }
 `
-const ContentPropsTableHeader = newStyled(ContentPropsTableCell)`
+const ContentPropsTableHeader = newStyled(ContentPropsTableCell)<{headerBackgroundColor: string}>`
     font-weight: bold;
-    background-color: #eaeaea;
+    background-color: ${({headerBackgroundColor}) => headerBackgroundColor};
 `
 
 export type ContentPropsTableProps = {
@@ -92,17 +95,23 @@ export type ContentPropsTableProps = {
 
 
 export const ContentPropsTableContainer = (props : {propsConfig : ContentPropsTableProps}) => {
-    return <ContentPropsTable>
-        <ContentPropsTableHeader>Property</ContentPropsTableHeader>
-        <ContentPropsTableHeader>Default Value</ContentPropsTableHeader>
-        <ContentPropsTableHeader>Type</ContentPropsTableHeader>
-        <ContentPropsTableHeader>Description</ContentPropsTableHeader>
+    const colorConfig = useStyleSystem().colors
+    const borderColor = getBorderColor(colorConfig)
+    const tableCellBackground = colorConfig.isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.03)'
+    const tableHeaderBackground = colorConfig.isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.07)'
+    const tableTextColor = getTextColor(colorConfig)
+
+    return <ContentPropsTable borderColor={borderColor}>
+        <ContentPropsTableHeader borderColor={borderColor} backgroundColor={tableCellBackground} textColor={tableTextColor} headerBackgroundColor={tableHeaderBackground}>Property</ContentPropsTableHeader>
+        <ContentPropsTableHeader borderColor={borderColor} backgroundColor={tableCellBackground} textColor={tableTextColor} headerBackgroundColor={tableHeaderBackground}>Default Value</ContentPropsTableHeader>
+        <ContentPropsTableHeader borderColor={borderColor} backgroundColor={tableCellBackground} textColor={tableTextColor} headerBackgroundColor={tableHeaderBackground}>Type</ContentPropsTableHeader>
+        <ContentPropsTableHeader borderColor={borderColor} backgroundColor={tableCellBackground} textColor={tableTextColor} headerBackgroundColor={tableHeaderBackground}>Description</ContentPropsTableHeader>
         {props.propsConfig.sort((a,b) => a.prop.localeCompare(b.prop)).map((prop, index) => {
             return <React.Fragment key={index}>
-                <ContentPropsTableCell>{prop.prop}</ContentPropsTableCell>
-                <ContentPropsTableCell>{prop.defaultValue.link ? <a href={prop.defaultValue.link} target="_blank" rel="noreferrer">{prop.defaultValue.value}</a> : prop.defaultValue.value}</ContentPropsTableCell>
-                <ContentPropsTableCell>{prop.valueType.link ? <a href={prop.valueType.link} target="_blank" rel="noreferrer">{prop.valueType.value}</a> : prop.valueType.value}</ContentPropsTableCell>
-                <ContentPropsTableCell>{prop.description}</ContentPropsTableCell>
+                <ContentPropsTableCell borderColor={borderColor} backgroundColor={tableCellBackground} textColor={tableTextColor}>{prop.prop}</ContentPropsTableCell>
+                <ContentPropsTableCell borderColor={borderColor} backgroundColor={tableCellBackground} textColor={tableTextColor}>{prop.defaultValue.link ? <a href={prop.defaultValue.link} target="_blank" rel="noreferrer">{prop.defaultValue.value}</a> : prop.defaultValue.value}</ContentPropsTableCell>
+                <ContentPropsTableCell borderColor={borderColor} backgroundColor={tableCellBackground} textColor={tableTextColor}>{prop.valueType.link ? <a href={prop.valueType.link} target="_blank" rel="noreferrer">{prop.valueType.value}</a> : prop.valueType.value}</ContentPropsTableCell>
+                <ContentPropsTableCell borderColor={borderColor} backgroundColor={tableCellBackground} textColor={tableTextColor}>{prop.description}</ContentPropsTableCell>
             </React.Fragment>
         })}
     </ContentPropsTable>

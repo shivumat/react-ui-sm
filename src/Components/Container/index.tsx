@@ -3,6 +3,7 @@ import newStyled from "@emotion/styled";
 import React from "react";
 import {
   ColorConfigType,
+  getSurfaceColor,
 } from "../../Mixins/Color";
 import { withStyleSystem, WithStyleSystemProps } from "../../Mixins/context";
 import { SizeProps } from "../../Mixins/Size";
@@ -39,7 +40,7 @@ const StyledContainer = newStyled.div<ContainerStyleProps>`
   ${({ type, flexDirection }) =>
     type === "flex" && flexDirection ? `flex-direction: ${flexDirection};` : ""}
   background-color: ${({ bgColor, colorConfig }) =>
-    bgColor || (colorConfig?.isDark ? colorConfig.foreGround : colorConfig?.backGround)};
+    bgColor || getSurfaceColor(colorConfig)};
   ${({padding, paddingConfig }) =>
     getSpacing({ spacingProps: padding, size: 'm', spaceConfig: paddingConfig, key: "padding" })}
   ${({margin, marginConfig }) =>

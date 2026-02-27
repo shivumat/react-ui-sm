@@ -4,15 +4,16 @@ import { useNavigate } from 'react-router';
 import Button from '../../../Components/Button';
 import { useStyleSystem } from '../../../Mixins/context';
 import { routesConfig } from '../config';
+import { getBorderColor, getSurfaceColor, getTextColor } from '../../../Mixins/Color';
 
-const SidebarContainer = newStyled.div<{ isOpen: boolean; isDark: boolean; foregroundColor: string; backgroundColor: string }>`
+const SidebarContainer = newStyled.div<{ isOpen: boolean; surfaceColor: string; borderColor: string }>`
   position: fixed;
   top: 0;
   left: ${({ isOpen }) => (isOpen ? '0' : '-350px')};
   height: 100%;
   width: 250px;
-  background-color: ${({ isDark, foregroundColor, backgroundColor }) => (isDark ? foregroundColor : backgroundColor)};
-  border-right: 1px solid ${({ backgroundColor, foregroundColor, isDark }) => (isDark ? backgroundColor : foregroundColor)}33;
+  background-color: ${({ surfaceColor }) => surfaceColor};
+  border-right: 1px solid ${({ borderColor }) => borderColor};
   display: flex;
   flex-direction: column;
   padding: 1rem;
@@ -20,14 +21,14 @@ const SidebarContainer = newStyled.div<{ isOpen: boolean; isDark: boolean; foreg
   z-index: 1000;
 `;
 
-const ArrowToggle = newStyled.div<{ isOpen: boolean; isDark: boolean }>`
+const ArrowToggle = newStyled.div<{ isOpen: boolean; textColor: string }>`
   position: fixed;
   top: 50%;
   left: ${({ isOpen }) => (isOpen ? '260px' : '0')};
   transform: translateY(-50%);
   width: 40px;
   height: 40px;
-  background: ${({ isDark }) => (isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)')};
+  background: ${({ textColor }) => `${textColor}CC`};
   border-radius: 20px;
   display: flex;
   align-items: center;
@@ -36,42 +37,40 @@ const ArrowToggle = newStyled.div<{ isOpen: boolean; isDark: boolean }>`
   z-index: 1100;
   transition: left 0.3s ease, background 0.3s ease;
   &:hover {
-    background: ${({ isDark }) => (isDark ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 1)')};
+    background: ${({ textColor }) => textColor};
   }
 `;
 
-const ChevronIcon = newStyled.div<{ isDark: boolean; foregroundColor: string; backgroundColor: string }>`
+const ChevronIcon = newStyled.div<{ iconColor: string }>`
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.2rem;
   padding-bottom: 2.5px;
-  color: ${({ isDark, foregroundColor, backgroundColor }) => (isDark ? foregroundColor : backgroundColor)};;
+  color: ${({ iconColor }) => iconColor};
 `;
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const colorConfig = useStyleSystem().colors;
+  const surfaceColor = getSurfaceColor(colorConfig);
+  const textColor = getTextColor(colorConfig);
+  const borderColor = getBorderColor(colorConfig);
 
   const toggleSidebar = () => setIsOpen(!isOpen);
 
   return (
     <>
-      <ArrowToggle isOpen={isOpen} isDark={colorConfig.isDark} onClick={toggleSidebar}>
-        <ChevronIcon 
-        isDark={colorConfig.isDark}
-        foregroundColor={colorConfig.foreGround}
-        backgroundColor={colorConfig.backGround}
-        >
+      <ArrowToggle isOpen={isOpen} textColor={textColor} onClick={toggleSidebar}>
+        <ChevronIcon iconColor={surfaceColor}>
             ☰
         </ChevronIcon>
       </ArrowToggle>
       <SidebarContainer
         isOpen={isOpen}
-        isDark={colorConfig.isDark}
-        foregroundColor={colorConfig.foreGround}
-        backgroundColor={colorConfig.backGround}
+        surfaceColor={surfaceColor}
+        borderColor={borderColor}
       >
         {routesConfig.map((route) => (
           <Button

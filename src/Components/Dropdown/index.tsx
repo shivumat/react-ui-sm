@@ -1,7 +1,7 @@
 import newStyled from "@emotion/styled";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
-import { ColorConfigType, ColorFamilyType, darken, getColor, lighten } from "../../Mixins/Color";
+import { ColorConfigType, ColorFamilyType, darken, getBorderColor, getColor, getSurfaceColor, getTextColor, lighten } from "../../Mixins/Color";
 import { getFontStyling } from "../../Mixins/Font";
 import { SizeProps, SizeType } from "../../Mixins/Size";
 import { getSpacing, SpacingProps } from "../../Mixins/Spacing";
@@ -66,7 +66,7 @@ const StyledLabel = newStyled.label<{ fontSize?: string; fontSizeConfig: SizePro
   margin-bottom: 0.5em;
   font-weight: 500;
   font-size: 0.9em;
-  color: ${({ colorConfig }) => (colorConfig?.isDark ? colorConfig.backGround : colorConfig?.foreGround)};
+  color: ${({ colorConfig }) => getTextColor(colorConfig)};
   
   ${({ fontSize, fontSizeConfig, customSize }) => getFontStyling({ size: customSize, fontSize, fontConfig: fontSizeConfig })}
 `;
@@ -76,18 +76,18 @@ const StyledInputToggle = newStyled.div<DropdownStyleProps>`
     getSpacing({ spacingProps: padding, size: customSize, spaceConfig: paddingConfig, key: "padding" })}
   ${({ customSize, fontSize, fontSizeConfig }) => getFontStyling({ size: customSize, fontSize, fontConfig: fontSizeConfig })}
   background-color: ${({ bgColor, disabled, colorConfig }) => {
-    const disabledColor = colorConfig.isDark ? colorConfig.foreGround : colorConfig.backGround;
-    return disabled ? disabledColor : bgColor || (colorConfig?.isDark ? colorConfig.foreGround : colorConfig?.backGround);
+    const disabledColor = getSurfaceColor(colorConfig);
+    return disabled ? disabledColor : bgColor || getSurfaceColor(colorConfig);
   }};
   color: ${({ color, colorConfig, colorFamily }) =>{
-    const defaultColor = colorFamily ? getColor({ colorFamily, color, colorConfig, disabled : false }) : (colorConfig?.isDark ? colorConfig.backGround : colorConfig?.foreGround);
+    const defaultColor = colorFamily ? getColor({ colorFamily, color, colorConfig, disabled : false }) : getTextColor(colorConfig);
     return color ?? defaultColor
 }};
   border: ${({ outlined = true, borderColor, hasError, onErrorBorderColor, colorConfig }) =>
       hasError
         ? `1px solid ${onErrorBorderColor || colorConfig?.danger}`
         : outlined
-        ? `1px solid ${borderColor || (colorConfig?.isDark ? colorConfig.backGround : colorConfig?.foreGround)}`
+        ? `1px solid ${borderColor || getBorderColor(colorConfig, 0.45)}`
         : "none"};
   border-radius: ${({ borderRadius }) => borderRadius || "0.25em"};
   width: 100%; /* Match the parent's width */
@@ -103,10 +103,10 @@ const StyledDropdownOptions = newStyled.div<DropdownStyleProps>`
   top: 100%;
   left: 0;
   background-color: ${({ bgColor, colorConfig }) =>
-    bgColor || (colorConfig?.isDark ? colorConfig.foreGround : colorConfig.backGround)};
-  color: ${({ colorConfig }) => (colorConfig?.isDark ? colorConfig.backGround : colorConfig.foreGround)};
+    bgColor || getSurfaceColor(colorConfig)};
+  color: ${({ colorConfig }) => getTextColor(colorConfig)};
   border: 1px solid ${({ colorConfig }) =>
-    colorConfig?.isDark ? colorConfig.backGround : colorConfig.foreGround};
+    getBorderColor(colorConfig, 0.45)};
   border-radius: ${({ borderRadius }) => borderRadius || "0.25em"};
   z-index: 1000;
   height : auto;
@@ -126,10 +126,10 @@ const StyledOption = newStyled.div<{ isSelected?: boolean; colorConfig: ColorCon
     return (isSelected ? defaultColor : "transparent")
   }};
   color: ${({ isSelected, colorConfig }) =>
-    isSelected ? colorConfig.foreGround : colorConfig?.isDark ? colorConfig.backGround : colorConfig.foreGround};
+    isSelected ? getTextColor(colorConfig) : getTextColor(colorConfig)};
   &:hover {
     background-color: ${({ colorConfig , colorFamily, color}) => colorFamily ? lighten(30, getColor({ colorFamily, color, colorConfig, disabled : false })) : (colorConfig?.isDark ? lighten(10, colorConfig.foreGround) : darken(10, colorConfig.backGround))};
-    color: ${({ colorConfig }) => colorConfig?.isDark ? colorConfig.backGround : colorConfig.foreGround};
+    color: ${({ colorConfig }) => getTextColor(colorConfig)};
   }
 `;
 

@@ -2,6 +2,7 @@ import newStyled from "@emotion/styled";
 import React from "react";
 import {
     ColorConfigType,
+    getTextColor,
 } from "../../Mixins/Color";
 import { withStyleSystem, WithStyleSystemProps } from "../../Mixins/context";
 import { getFontStyling } from "../../Mixins/Font";
@@ -39,7 +40,7 @@ const StyledText = newStyled.div<TextStyleProps>`
   ${({ size, fontSize, fontSizeConfig }) => getFontStyling({ size, fontSize, fontConfig: fontSizeConfig })}
   font-weight: ${({ fontWeight }) => fontWeight || "normal"};
   color: ${({ color, colorConfig }) =>
-        color || (colorConfig?.isDark ? colorConfig.backGround : colorConfig?.foreGround)};
+        color || getTextColor(colorConfig)};
   text-decoration: ${({ underline }) => (underline ? "underline" : "none")};
   font-style: ${({ italic }) => (italic ? "italic" : "normal")};
 `;

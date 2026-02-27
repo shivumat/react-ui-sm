@@ -1,7 +1,7 @@
 // Customizable Toggle Button Component (ToggleButton.tsx)
 import newStyled from "@emotion/styled";
-import React, { useState } from "react";
-import { ColorConfigType } from "../../Mixins/Color";
+import React from "react";
+import { ColorConfigType, getBorderColor, getSurfaceColor } from "../../Mixins/Color";
 import { useStyleSystem } from "../../Mixins/context";
 import { SpacingProps } from "../../Mixins/Spacing";
 
@@ -30,8 +30,8 @@ const StyledToggleButton = newStyled.div<Pick<ToggleButtonStyleProps, 'toggleOnC
   height: ${({ size = 50}) => `${size / 2}px`};
   background-color: ${({ isOn, toggleOnColor, toggleOffColor, colorConfig }) =>
     isOn
-      ? toggleOnColor || (colorConfig.isDark ? colorConfig.backGround : colorConfig.foreGround)
-      : toggleOffColor || (!colorConfig.isDark ? colorConfig.foreGround : colorConfig.backGround)};
+      ? toggleOnColor || colorConfig.primary
+      : toggleOffColor || getBorderColor(colorConfig, 0.45)};
   border-radius: ${({ borderRadius }) => borderRadius || "25px"};
   position: relative;
   cursor: pointer;
@@ -40,10 +40,10 @@ const StyledToggleButton = newStyled.div<Pick<ToggleButtonStyleProps, 'toggleOnC
 
 const ToggleCircle = newStyled.div<Pick<ToggleButtonStyleProps, 'toggleOnColor' | 'toggleOffColor' | 'size' | 'colorConfig' | 'isOn'>>`
   width: ${({ size = 50 }) => `${size/ 2.5}px`};
-  ${({colorConfig, size = 50}) => colorConfig.isDark ? `border : ${size/25}px solid ${colorConfig.foreGround}` : ''};
+  ${({colorConfig, size = 50}) => colorConfig.isDark ? `border : ${size/25}px solid ${getBorderColor(colorConfig, 0.5)}` : ''};
   outline: none;
   height: ${({ size = 50 }) => `${size/ 2.5}px`};
-  background-color: ${({colorConfig}) => colorConfig.isDark ? colorConfig.foreGround : colorConfig.backGround};
+  background-color: ${({colorConfig}) => getSurfaceColor(colorConfig)};
   border-radius: 50%;
   position: absolute;
   top: 50%;
@@ -54,7 +54,7 @@ const ToggleCircle = newStyled.div<Pick<ToggleButtonStyleProps, 'toggleOnColor' 
 
 const ToggleButton = React.memo((props: ToggleButtonProps) => {
   const {
-    isOn: initialIsOn = false,
+    isOn = false,
     toggleOnColor,
     toggleOffColor,
     size = 50,
@@ -66,11 +66,8 @@ const ToggleButton = React.memo((props: ToggleButtonProps) => {
     ...rest
   } = props;
 
-  const [isOn, setIsOn] = useState<boolean>(initialIsOn);
-
   const handleToggle = () => {
     const newState = !isOn;
-    setIsOn(newState);
     if (onToggle) onToggle(newState);
   };
 
