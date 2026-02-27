@@ -1,6 +1,6 @@
-import Button from '../../../../Components/Button'
+import Button from '../../../../Components/Inputs/Button'
 import { ContentCard, CodeBlock, ContentBlock, ContentBody } from '../Content'
-import LoadingSpinner from '../../../../Components/LoadingSpinner'
+import LoadingSpinner from '../../../../Components/FeedbackStatus/LoadingSpinner'
 
 const ButtonContentDisabledVariants = () => {
 

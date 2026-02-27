@@ -1,4 +1,4 @@
-import Input from '../../../../Components/Input';
+import Input from '../../../../Components/Inputs/Input';
 import { CodeBlock, ContentBody, ContentCard } from '../Content';
 import { StyledContentBlock } from './config';
 

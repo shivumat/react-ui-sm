@@ -1,9 +1,9 @@
 import newStyled from '@emotion/styled';
-import ContainerComponent from '../../Components/Container';
-import TextComponent from '../../Components/Text';
-import ToggleButton from '../../Components/ToggleButton';
-import { useStyleSystem } from '../../Mixins/context';
-import { getBorderColor } from '../../Mixins/Color';
+import ContainerComponent from '../../Components/LayoutStructure/BoxContainer';
+import TextComponent from '../../Components/DataDisplay/Text';
+import ToggleButton from '../../Components/Inputs/SwitchToggle';
+import { useStyleSystem } from "@/Mixins/context";
+import { getBorderColor } from "@/Mixins/Color";
 
 const HeaderContainer = newStyled(ContainerComponent)<{borderColor: string}>`
     height : 60px;

@@ -1,0 +1,103 @@
+// Customizable Container Component (ContainerComponent.tsx)
+import newStyled from "@emotion/styled";
+import React from "react";
+import {
+  ColorConfigType,
+  getSurfaceColor,
+} from "@/Mixins/Color";
+import { withStyleSystem, WithStyleSystemProps } from "@/Mixins/context";
+import { SizeProps } from "@/Mixins/Size";
+import { getSpacing, SpacingProps } from "@/Mixins/Spacing";
+
+type ContainerType = "normal" | "flex" | "grid";
+
+type ContainerComponentProps = {
+  type?: ContainerType;
+  bgColor?: string;
+  padding?: SpacingProps;
+  margin?: SpacingProps;
+  border?: string;
+  borderRadius?: string;
+  children: React.ReactNode;
+  className?: string;
+  gridTemplateColumns?: string;
+  flexDirection?: "row" | "column";
+  justifyContent?: string;
+  alignItems?: string;
+};
+
+type ContainerStyleProps = ContainerComponentProps & {
+  paddingConfig: SizeProps;
+  marginConfig: SizeProps;
+  colorConfig: ColorConfigType;
+};
+
+const StyledContainer = newStyled.div<ContainerStyleProps>`
+  display: ${({ type }) =>
+    type === "flex" ? "flex" : type === "grid" ? "grid" : "block"};
+  ${({ type, gridTemplateColumns }) =>
+    type === "grid" && gridTemplateColumns ? `grid-template-columns: ${gridTemplateColumns};` : ""}
+  ${({ type, flexDirection }) =>
+    type === "flex" && flexDirection ? `flex-direction: ${flexDirection};` : ""}
+  background-color: ${({ bgColor, colorConfig }) =>
+    bgColor || getSurfaceColor(colorConfig)};
+  ${({padding, paddingConfig }) =>
+    getSpacing({ spacingProps: padding, size: 'm', spaceConfig: paddingConfig, key: "padding" })}
+  ${({margin, marginConfig }) =>
+    getSpacing({ spacingProps: margin, size : 'm', spaceConfig: marginConfig, key: "margin" })}
+  border: ${({ border }) => border || "none"};
+  border-radius: ${({ borderRadius }) => borderRadius || "0em"};
+  ${({ type, justifyContent }) =>
+    type === "flex" ? `justify-content: ${justifyContent || "flex-start"};` : ""}
+  ${({ type, alignItems }) =>
+    type === "flex" ? `align-items: ${alignItems || "stretch"};` : ""}
+`;
+
+const ContainerComponentBase = (props: ContainerComponentProps & WithStyleSystemProps) => {
+  const {
+    type = "normal",
+    bgColor,
+    padding,
+    margin,
+    border,
+    borderRadius,
+    children,
+    className,
+    gridTemplateColumns,
+    flexDirection,
+    justifyContent,
+    alignItems,
+    styleSystem,
+    ...rest
+  } = props;
+
+  const paddingConfig = styleSystem.spacing.padding
+  const marginConfig = styleSystem.spacing.margin
+  const colorConfig = styleSystem.colors
+
+  return (
+    <StyledContainer
+      type={type}
+      bgColor={bgColor}
+      padding={padding}
+      margin={margin}
+      border={border}
+      borderRadius={borderRadius}
+      className={className}
+      gridTemplateColumns={gridTemplateColumns}
+      flexDirection={flexDirection}
+      paddingConfig={paddingConfig}
+      marginConfig={marginConfig}
+      colorConfig={colorConfig}
+      justifyContent={justifyContent}
+      alignItems={alignItems}
+      {...rest}
+    >
+      {children}
+    </StyledContainer>
+  );
+};
+
+const ContainerComponent = React.memo(withStyleSystem(ContainerComponentBase))
+
+export default ContainerComponent;

@@ -1,4 +1,4 @@
-import Dropdown from '../../../../Components/Dropdown';
+import Dropdown from '../../../../Components/Inputs/Select';
 import { CodeBlock, ContentBody, ContentCard } from '../Content';
 import { options, StyledContentBlock } from './config';
 

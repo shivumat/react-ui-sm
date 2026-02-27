@@ -1,4 +1,4 @@
-import TextComponent from '../../../../Components/Text'
+import TextComponent from '../../../../Components/DataDisplay/Text'
 import { ContentPropsTableContainer } from '../Content'
 import InputContentColorFamily from './ColorFamily'
 import { InputContentPropsConfig } from './config'

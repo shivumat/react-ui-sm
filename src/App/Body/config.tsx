@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { NavItem } from "../../Components/Navbar/Navbar";
+import { NavItem } from "../../Components/Navigation/NavbarTopBar/Navbar";
 import ButtonContent from "./Content/ButtonContent";
 import DropdownContent from "./Content/DropdownContent";
 import HomeContent from "./Content/HomeContent";

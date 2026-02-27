@@ -1,5 +1,5 @@
 import newStyled from "@emotion/styled";
-import { DropdownOption } from "../../../../Components/Dropdown";
+import { DropdownOption } from "../../../../Components/Inputs/Select";
 import { ContentBlock, ContentPropsTableProps } from "../Content";
 
 export const StyledContentBlock = newStyled(ContentBlock)`

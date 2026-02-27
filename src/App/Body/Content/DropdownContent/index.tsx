@@ -1,4 +1,4 @@
-import TextComponent from '../../../../Components/Text'
+import TextComponent from '../../../../Components/DataDisplay/Text'
 import { ContentPropsTableContainer } from '../Content'
 import DropdownContentColorFamily from './ColorFamily'
 import { DropdownContentPropsConfig, DropdownOptionConfig } from './config'

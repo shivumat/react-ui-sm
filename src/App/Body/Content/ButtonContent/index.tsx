@@ -5,7 +5,7 @@ import ButtonMultiComponents from './MultiComponents'
 import ButtonContentDisabledVariants from './DisabledVariant'
 import { ContentPropsTableContainer } from '../Content'
 import { ButtonContentPropsConfig } from './config'
-import TextComponent from '../../../../Components/Text'
+import TextComponent from '../../../../Components/DataDisplay/Text'
 
 const ButtonContent = () => {
 

@@ -1,4 +1,4 @@
-import Button from '../../../../Components/Button'
+import Button from '../../../../Components/Inputs/Button'
 import { CodeBlock, ContentBlock, ContentBody, ContentCard } from '../Content'
 
 const ButtonContentColorFamily = () => {

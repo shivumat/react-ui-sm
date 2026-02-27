@@ -1,7 +1,7 @@
 import newStyled from '@emotion/styled'
 import HomeContent from './HomeContent'
 import { routesConfig } from '../config'
-import ContainerComponent from '../../../Components/Container'
+import ContainerComponent from '../../../Components/LayoutStructure/BoxContainer'
 
 const ContentContainer = newStyled(ContainerComponent)`
     height: 100%;

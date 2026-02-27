@@ -1,4 +1,4 @@
-import Button from '../../../../Components/Button'
+import Button from '../../../../Components/Inputs/Button'
 import { ContentCard, CodeBlock, ContentBlock, ContentBody } from '../Content'
 
 const ButtonContentDisabledVariants = () => {

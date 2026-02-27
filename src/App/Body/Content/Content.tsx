@@ -1,8 +1,8 @@
 import newStyled from "@emotion/styled";
 import React from "react";
-import CardComponent from "../../../Components/Card";
-import { getBorderColor, getTextColor } from "../../../Mixins/Color";
-import { useStyleSystem } from "../../../Mixins/context";
+import CardComponent from "../../../Components/LayoutStructure/Card";
+import { getBorderColor, getTextColor } from "@/Mixins/Color";
+import { useStyleSystem } from "@/Mixins/context";
 
 export const ContentCard = newStyled(CardComponent)`
     display: flex;

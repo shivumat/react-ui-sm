@@ -1,10 +1,10 @@
 import newStyled from '@emotion/styled';
 import { useNavigate } from 'react-router';
-import Button from '../../../Components/Button';
+import Button from '../../../Components/Inputs/Button';
 import { routesConfig } from '../config';
-// import { NavBar } from '../../../Components/Navbar'
-import { useStyleSystem } from '../../../Mixins/context';
-import { getBorderColor, getSurfaceColor } from '../../../Mixins/Color';
+// import { NavBar } from '../../../Components/Navigation/NavbarTopBar'
+import { useStyleSystem } from "@/Mixins/context";
+import { getBorderColor, getSurfaceColor } from "@/Mixins/Color";
 
 const SidebarContainer = newStyled.div<{borderColor: string; surfaceColor: string}>`
     display: flex;

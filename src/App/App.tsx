@@ -1,6 +1,6 @@
 import newStyled from '@emotion/styled'
 import { BrowserRouter, Route, Routes } from 'react-router'
-import ContainerComponent from '../Components/Container'
+import ContainerComponent from '../Components/LayoutStructure/BoxContainer'
 import Body from './Body'
 import Header from './Header'
 // import { useState } from 'react'

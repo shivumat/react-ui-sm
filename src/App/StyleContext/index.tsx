@@ -3,8 +3,8 @@ import {
   DesignSystemContext,
   DesignSystemOverrides,
   createDesignSystem,
-} from '../../Mixins/context'
-import { ThemeModeType } from '../../Mixins/Theme'
+} from "@/Mixins/context"
+import { ThemeModeType } from "@/Mixins/Theme"
 
 interface StyleContextType {
     children : React.ReactNode

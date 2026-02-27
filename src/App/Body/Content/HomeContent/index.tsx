@@ -1,5 +1,5 @@
 import React from "react";
-import TextComponent from "../../../../Components/Text";
+import TextComponent from "../../../../Components/DataDisplay/Text";
 
 interface FeatureCardProps {
   title: string;
