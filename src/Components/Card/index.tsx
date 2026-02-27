@@ -1,10 +1,10 @@
 // Customizable Card Component (CardComponent.tsx)
-import React, { useContext } from "react";
+import React from "react";
 import newStyled from "@emotion/styled";
 import { SizeProps } from "../../Mixins/Size";
 import { getSpacing, SpacingProps } from "../../Mixins/Spacing";
 import { ColorConfigType } from "../../Mixins/Color";
-import { ColorFamilyContext, PaddingContext } from "../../Mixins/context";
+import { withStyleSystem, WithStyleSystemProps } from "../../Mixins/context";
 
 type CardComponentProps = {
   bgColor?: string;
@@ -51,7 +51,7 @@ const CardFooter = newStyled.div`
   border-top: 1px solid #e0e0e0;
 `;
 
-const CardComponent = React.memo((props: CardComponentProps) => {
+const CardComponentBase = (props: CardComponentProps & WithStyleSystemProps) => {
   const {
     bgColor,
     padding,
@@ -63,11 +63,12 @@ const CardComponent = React.memo((props: CardComponentProps) => {
     footer,
     children,
     className,
+    styleSystem,
     ...rest
   } = props;
 
-const paddingConfig = useContext(PaddingContext)
-const colorConfig = useContext(ColorFamilyContext)
+  const paddingConfig = styleSystem.spacing.padding
+  const colorConfig = styleSystem.colors
 
   return (
     <StyledCard
@@ -87,6 +88,8 @@ const colorConfig = useContext(ColorFamilyContext)
       {footer && <CardFooter>{footer}</CardFooter>}
     </StyledCard>
   );
-});
+};
+
+const CardComponent = React.memo(withStyleSystem(CardComponentBase))
 
 export default CardComponent;

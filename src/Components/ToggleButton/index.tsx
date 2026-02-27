@@ -1,8 +1,8 @@
 // Customizable Toggle Button Component (ToggleButton.tsx)
 import newStyled from "@emotion/styled";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { ColorConfigType } from "../../Mixins/Color";
-import { ColorFamilyContext } from "../../Mixins/context";
+import { useStyleSystem } from "../../Mixins/context";
 import { SpacingProps } from "../../Mixins/Spacing";
 
 type ToggleButtonProps = {
@@ -74,7 +74,7 @@ const ToggleButton = React.memo((props: ToggleButtonProps) => {
     if (onToggle) onToggle(newState);
   };
 
-   const colorConfig = useContext(ColorFamilyContext)
+  const colorConfig = useStyleSystem().colors
 
   return (
     <StyledToggleButton

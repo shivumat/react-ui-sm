@@ -1,10 +1,10 @@
 // Customizable Container Component (ContainerComponent.tsx)
 import newStyled from "@emotion/styled";
-import React, { useContext } from "react";
+import React from "react";
 import {
   ColorConfigType,
 } from "../../Mixins/Color";
-import { ColorFamilyContext, MarginContext, PaddingContext } from "../../Mixins/context";
+import { withStyleSystem, WithStyleSystemProps } from "../../Mixins/context";
 import { SizeProps } from "../../Mixins/Size";
 import { getSpacing, SpacingProps } from "../../Mixins/Spacing";
 
@@ -52,7 +52,7 @@ const StyledContainer = newStyled.div<ContainerStyleProps>`
     type === "flex" ? `align-items: ${alignItems || "stretch"};` : ""}
 `;
 
-const ContainerComponent = React.memo((props: ContainerComponentProps) => {
+const ContainerComponentBase = (props: ContainerComponentProps & WithStyleSystemProps) => {
   const {
     type = "normal",
     bgColor,
@@ -66,12 +66,13 @@ const ContainerComponent = React.memo((props: ContainerComponentProps) => {
     flexDirection,
     justifyContent,
     alignItems,
+    styleSystem,
     ...rest
   } = props;
 
-const paddingConfig = useContext(PaddingContext)
-const marginConfig = useContext(MarginContext)
-const colorConfig = useContext(ColorFamilyContext)
+  const paddingConfig = styleSystem.spacing.padding
+  const marginConfig = styleSystem.spacing.margin
+  const colorConfig = styleSystem.colors
 
   return (
     <StyledContainer
@@ -94,6 +95,8 @@ const colorConfig = useContext(ColorFamilyContext)
       {children}
     </StyledContainer>
   );
-});
+};
+
+const ContainerComponent = React.memo(withStyleSystem(ContainerComponentBase))
 
 export default ContainerComponent;

@@ -1,6 +1,5 @@
 import newStyled from '@emotion/styled';
-import { useContext } from 'react';
-import { ColorFamilyContext } from '../../Mixins/context';
+import { useStyleSystem } from '../../Mixins/context';
 
 export type LoadingSpinnerProps = {
     loaderWidth?: number
@@ -43,7 +42,7 @@ const LoadingSpinnerContainer = newStyled.div<LoadingSpinnerProps>`
 
 const LoadingSpinner = (props : LoadingSpinnerProps) => {
 
-    const colorConfig = useContext(ColorFamilyContext)
+    const colorConfig = useStyleSystem().colors
 
     const {loaderWidth = 2, width , height, color = colorConfig.isDark ? colorConfig.foreGround : colorConfig.backGround} = props
 

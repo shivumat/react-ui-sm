@@ -1,9 +1,8 @@
 import newStyled from '@emotion/styled';
-import { useContext } from 'react';
 import ContainerComponent from '../../Components/Container';
 import TextComponent from '../../Components/Text';
 import ToggleButton from '../../Components/ToggleButton';
-import { ColorFamilyContext } from '../../Mixins/context';
+import { useStyleSystem } from '../../Mixins/context';
 
 const HeaderContainer = newStyled(ContainerComponent)<{isDark : boolean, foregroundColor: string, backgroundColor: string}>`
     height : 60px;
@@ -12,7 +11,7 @@ const HeaderContainer = newStyled(ContainerComponent)<{isDark : boolean, foregro
 
 const Header = (props : {setIsDarkMode: React.Dispatch<React.SetStateAction<boolean>>}) => {
 
-  const colorConfig = useContext(ColorFamilyContext)
+  const colorConfig = useStyleSystem().colors
 
   return (
     <HeaderContainer 

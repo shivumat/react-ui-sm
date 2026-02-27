@@ -1,11 +1,11 @@
 // Customizable TextInput.tsx
 import newStyled from "@emotion/styled";
-import React, { DetailedHTMLProps, InputHTMLAttributes, useContext } from "react";
+import React, { DetailedHTMLProps, InputHTMLAttributes } from "react";
 import { ColorConfigType, ColorFamilyType, getColor } from "../../Mixins/Color";
 import { getFontStyling } from "../../Mixins/Font";
 import { SizeProps, SizeType } from "../../Mixins/Size";
 import { getSpacing, SpacingProps } from "../../Mixins/Spacing";
-import { ColorFamilyContext, FontSizeContext, MarginContext, PaddingContext } from "../../Mixins/context";
+import { withStyleSystem, WithStyleSystemProps } from "../../Mixins/context";
 
 type DefaultInputProps = DetailedHTMLProps<
   InputHTMLAttributes<HTMLInputElement>,
@@ -108,7 +108,7 @@ const StyledInput = newStyled.input<TextInputStyleProps>`
   }
 `;
 
-const TextInput = React.memo((props: TextInputProps ) => {
+const TextInputBase = (props: TextInputProps & WithStyleSystemProps) => {
     const {
         label,
         areaLabel,
@@ -121,13 +121,14 @@ const TextInput = React.memo((props: TextInputProps ) => {
         hasError,
         errorText,
         helpText,
+        styleSystem,
         ...rest
     } = props;
 
-    const paddingConfig = useContext(PaddingContext)
-    const marginConfig = useContext(MarginContext)
-    const fontSizeConfig = useContext(FontSizeContext)
-    const colorConfig = useContext(ColorFamilyContext)
+    const paddingConfig = styleSystem.spacing.padding
+    const marginConfig = styleSystem.spacing.margin
+    const fontSizeConfig = styleSystem.typography.fontSize
+    const colorConfig = styleSystem.colors
 
     return (
         <StyledInputWrapper {...rest} customSize={customSize} paddingConfig={paddingConfig} marginConfig={marginConfig} fontSizeConfig={fontSizeConfig} colorConfig={colorConfig}>
@@ -153,6 +154,8 @@ const TextInput = React.memo((props: TextInputProps ) => {
           {!hasError && helpText && <StyledText colorConfig={colorConfig} className={`error-help ${rest.errorClass}`} >{helpText}</StyledText>}
         </StyledInputWrapper>
     );
-});
+};
+
+const TextInput = React.memo(withStyleSystem(TextInputBase))
 
 export default TextInput;

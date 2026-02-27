@@ -1,5 +1,30 @@
 import { SizeProps, SizeType } from "./Size"
 
+export enum SpacingScaleEnum {
+    none = 'none',
+    xxs = 'xxs',
+    xs = 'xs',
+    s = 's',
+    m = 'm',
+    l = 'l',
+    xl = 'xl',
+    xxl = 'xxl',
+}
+
+export type SpacingScaleType = keyof typeof SpacingScaleEnum
+export type SpacingScaleProps = { [K in SpacingScaleType]: string }
+
+export const SpacingScaleConfig: SpacingScaleProps = {
+    none: '0',
+    xxs: '0.125rem',
+    xs: '0.25rem',
+    s: '0.5rem',
+    m: '0.75rem',
+    l: '1rem',
+    xl: '1.5rem',
+    xxl: '2rem',
+}
+
 type SpacingAllProps = {
     all: string
 }
@@ -19,23 +44,23 @@ type SpacingSideProps = {
 export type SpacingProps = SpacingAllProps | SpacingAxisProps | SpacingSideProps
 
 export const PaddingConfig : SizeProps = {
-    xxs: "0.5em 0.75em",
-    xs: "0.5em 0.75em",
-    s: "0.5em 0.75em",
-    m: "0.5em 0.75em",
-    l: "0.5em 0.75em",
-    xl: "0.5em 0.75em",
-    xxl: "0.5em 0.75em",
+    xxs: `${SpacingScaleConfig.xxs} ${SpacingScaleConfig.s}`,
+    xs: `${SpacingScaleConfig.xs} ${SpacingScaleConfig.m}`,
+    s: `${SpacingScaleConfig.s} ${SpacingScaleConfig.l}`,
+    m: `${SpacingScaleConfig.m} ${SpacingScaleConfig.xl}`,
+    l: `${SpacingScaleConfig.l} ${SpacingScaleConfig.xl}`,
+    xl: `${SpacingScaleConfig.xl} ${SpacingScaleConfig.xxl}`,
+    xxl: `${SpacingScaleConfig.xxl} ${SpacingScaleConfig.xxl}`,
 }
 
 export const MarginConfig : SizeProps = {
-    xxs: "0.5em 0.5em",
-    xs: "0.5em 0.5em",
-    s: "0.5em 0.5em",
-    m: "0.5em 0.5em",
-    l: "0.5em 0.5em",
-    xl: "0.5em 0.5em",
-    xxl: "0.5em 0.5em",
+    xxs: `${SpacingScaleConfig.xxs} ${SpacingScaleConfig.xxs}`,
+    xs: `${SpacingScaleConfig.xs} ${SpacingScaleConfig.xs}`,
+    s: `${SpacingScaleConfig.s} ${SpacingScaleConfig.s}`,
+    m: `${SpacingScaleConfig.m} ${SpacingScaleConfig.m}`,
+    l: `${SpacingScaleConfig.l} ${SpacingScaleConfig.l}`,
+    xl: `${SpacingScaleConfig.xl} ${SpacingScaleConfig.xl}`,
+    xxl: `${SpacingScaleConfig.xxl} ${SpacingScaleConfig.xxl}`,
 }
 
 export const getSpacing = (info : {spacingProps?: SpacingProps; size? : SizeType; spaceConfig? : SizeProps; key : 'margin' | 'padding'}) => {

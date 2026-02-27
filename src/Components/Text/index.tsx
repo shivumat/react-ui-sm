@@ -1,9 +1,9 @@
 import newStyled from "@emotion/styled";
-import React, { useContext } from "react";
+import React from "react";
 import {
     ColorConfigType,
 } from "../../Mixins/Color";
-import { ColorFamilyContext, FontSizeContext } from "../../Mixins/context";
+import { withStyleSystem, WithStyleSystemProps } from "../../Mixins/context";
 import { getFontStyling } from "../../Mixins/Font";
 import { SizeProps, SizeType } from "../../Mixins/Size";
 import { getSpacing, SpacingProps } from "../../Mixins/Spacing";
@@ -44,25 +44,28 @@ const StyledText = newStyled.div<TextStyleProps>`
   font-style: ${({ italic }) => (italic ? "italic" : "normal")};
 `;
 
-const TextComponent = React.memo((props: Omit<TextComponentProps, 'children'>) => {
+const TextComponentBase = (props: Omit<TextComponentProps, 'children'> & WithStyleSystemProps) => {
     const {
         label,
         tag = "p",
         className,
         ariaLabel,
+        styleSystem,
         ...rest
     } = props;
 
     const CustomTag = tag as keyof JSX.IntrinsicElements;
 
-    const fontSizeConfig = useContext(FontSizeContext)
-    const colorConfig = useContext(ColorFamilyContext)
+    const fontSizeConfig = styleSystem.typography.fontSize
+    const colorConfig = styleSystem.colors
 
     return (
         <StyledText label={label} as={CustomTag} className={className} aria-label={ariaLabel} fontSizeConfig={fontSizeConfig} colorConfig={colorConfig}  {...rest}>
             {label}
         </StyledText>
     );
-});
+};
+
+const TextComponent = React.memo(withStyleSystem(TextComponentBase))
 
 export default TextComponent;

@@ -1,11 +1,11 @@
 import newStyled from "@emotion/styled";
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import { ColorConfigType, ColorFamilyType, darken, getColor, lighten } from "../../Mixins/Color";
 import { getFontStyling } from "../../Mixins/Font";
 import { SizeProps, SizeType } from "../../Mixins/Size";
 import { getSpacing, SpacingProps } from "../../Mixins/Spacing";
-import { ColorFamilyContext, FontSizeContext, MarginContext, PaddingContext } from "../../Mixins/context";
+import { withStyleSystem, WithStyleSystemProps } from "../../Mixins/context";
 
 export type DropdownOption = {
   label: string;
@@ -133,7 +133,7 @@ const StyledOption = newStyled.div<{ isSelected?: boolean; colorConfig: ColorCon
   }
 `;
 
-const Dropdown = React.memo((props: DropdownInputProps) => {
+const DropdownBase = (props: DropdownInputProps & WithStyleSystemProps) => {
   const {
     label,
     options = [],
@@ -148,6 +148,7 @@ const Dropdown = React.memo((props: DropdownInputProps) => {
     labelClass,
     helpClass,
     errorClass,
+    styleSystem,
     ...rest
   } = props;
 
@@ -157,10 +158,10 @@ const Dropdown = React.memo((props: DropdownInputProps) => {
   const toggleRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const paddingConfig = useContext(PaddingContext);
-  const marginConfig = useContext(MarginContext);
-  const fontSizeConfig = useContext(FontSizeContext);
-  const colorConfig = useContext(ColorFamilyContext);
+  const paddingConfig = styleSystem.spacing.padding
+  const marginConfig = styleSystem.spacing.margin
+  const fontSizeConfig = styleSystem.typography.fontSize
+  const colorConfig = styleSystem.colors
 
   const handleToggle = useCallback(() => {
     if (toggleRef.current) {
@@ -303,6 +304,8 @@ const Dropdown = React.memo((props: DropdownInputProps) => {
       )}
     </StyledDropdownWrapper>
   );
-});
+};
+
+const Dropdown = React.memo(withStyleSystem(DropdownBase))
 
 export default Dropdown;

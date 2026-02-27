@@ -1,7 +1,7 @@
-import { useContext } from 'react';
+import React from 'react';
 import { ButtonProps, DefaultButtonProps, StyledButton } from './Button'
 import newStyled from '@emotion/styled'
-import { ColorFamilyContext, FontSizeContext, MarginContext, PaddingContext } from '../../Mixins/context'
+import { useStyleSystem } from '../../Mixins/context'
 
 
 const TrailingContainer = newStyled.span`
@@ -23,10 +23,11 @@ const Button = (props: ButtonProps & DefaultButtonProps) => {
     ...rest
   } = props;
 
-  const paddingConfig = useContext(PaddingContext)
-  const marginConfig = useContext(MarginContext)
-  const fontSizeConfig = useContext(FontSizeContext)
-  const colorConfig = useContext(ColorFamilyContext)
+  const styleSystem = useStyleSystem()
+  const paddingConfig = styleSystem.spacing.padding
+  const marginConfig = styleSystem.spacing.margin
+  const fontSizeConfig = styleSystem.typography.fontSize
+  const colorConfig = styleSystem.colors
 
 
   if('loadingComponent' in props) {
@@ -46,4 +47,4 @@ const Button = (props: ButtonProps & DefaultButtonProps) => {
   )
 }
 
-export default Button
+export default React.memo(Button)

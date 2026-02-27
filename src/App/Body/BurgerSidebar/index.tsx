@@ -1,8 +1,8 @@
 import newStyled from '@emotion/styled';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import Button from '../../../Components/Button';
-import { ColorFamilyContext } from '../../../Mixins/context';
+import { useStyleSystem } from '../../../Mixins/context';
 import { routesConfig } from '../config';
 
 const SidebarContainer = newStyled.div<{ isOpen: boolean; isDark: boolean; foregroundColor: string; backgroundColor: string }>`
@@ -52,7 +52,7 @@ const ChevronIcon = newStyled.div<{ isDark: boolean; foregroundColor: string; ba
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  const colorConfig = useContext(ColorFamilyContext);
+  const colorConfig = useStyleSystem().colors;
 
   const toggleSidebar = () => setIsOpen(!isOpen);
 

@@ -1,28 +1,31 @@
 import React from 'react';
-import { MarginConfig, PaddingConfig } from '../../Mixins/Spacing'
-import { FontSizeConfig } from '../../Mixins/Font'
-import { ColorFamilyConfig } from '../../Mixins/Color'
-import { ColorFamilyContext, FontSizeContext, MarginContext, PaddingContext } from '../../Mixins/context'
+import {
+  DesignSystemContext,
+  DesignSystemOverrides,
+  createDesignSystem,
+} from '../../Mixins/context'
+import { ThemeModeType } from '../../Mixins/Theme'
 
 interface StyleContextType {
     children : React.ReactNode
     isDarkMode?: boolean
+    themeMode?: ThemeModeType
+    tokenOverrides?: DesignSystemOverrides
 }
 
 const StyleContext = (props : StyleContextType) => {
 
-  const {isDarkMode = false} = props
+  const {isDarkMode = false, themeMode, tokenOverrides} = props
+  const styleSystem = React.useMemo(() => createDesignSystem({
+    isDarkMode,
+    themeMode,
+    overrides: tokenOverrides,
+  }), [isDarkMode, themeMode, tokenOverrides])
 
   return (
-    <PaddingContext.Provider value={PaddingConfig}>
-      <MarginContext.Provider value={MarginConfig}>
-        <FontSizeContext.Provider value={FontSizeConfig}>
-          <ColorFamilyContext.Provider value={{...ColorFamilyConfig, isDark : isDarkMode}}>
-            {props.children}
-          </ColorFamilyContext.Provider>
-        </FontSizeContext.Provider>
-      </MarginContext.Provider>
-    </PaddingContext.Provider>
+    <DesignSystemContext.Provider value={styleSystem}>
+      {props.children}
+    </DesignSystemContext.Provider>
   )
 }
 
