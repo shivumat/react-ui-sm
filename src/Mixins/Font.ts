@@ -13,6 +13,6 @@ export const FontSizeConfig : SizeProps = {
 export const getFontStyling = (info : {size?: SizeType; fontSize?: string; fontConfig?: SizeProps}) => {
     const {size = 'm', fontSize, fontConfig} = info
     const value = fontSize ?? fontConfig?.[size]
-    if (!value) return '' 
+    if (value === undefined || value === null || value === '') return ''
     return `font-size: ${value};`
 }

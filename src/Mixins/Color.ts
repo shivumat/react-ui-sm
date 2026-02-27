@@ -18,7 +18,7 @@ export const DISABLED_COLOR = '#C2C2C2'
 export const FOREGROUND_COLOR = '#171818'
 export const BACKGROUND_COLOR = '#F7F8F9'
 
-export const ColorfamilyConfig : ColorConfigType = {
+export const ColorFamilyConfig : ColorConfigType = {
   primary: '#0052CC',
   secondary: '#6554C0',
   tertiary : 'gray',
@@ -31,6 +31,9 @@ export const ColorfamilyConfig : ColorConfigType = {
   backGround: BACKGROUND_COLOR,
   isDark : false,
 }
+
+// Backward-compatible alias. Prefer ColorFamilyConfig in new code.
+export const ColorfamilyConfig = ColorFamilyConfig
 
 
 export const getColor = (info : {colorFamily?: ColorFamilyType; color?: string; colorConfig: ColorConfigType; disabled?: boolean}) => {
@@ -108,4 +111,3 @@ export const darken = (amount: number, color: string): string => {
     const newL = Math.max(0, l - amount);
     return hslToHex(h, s, newL);
 };
-

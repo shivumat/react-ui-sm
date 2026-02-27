@@ -1,7 +1,7 @@
 import React from 'react';
 import { MarginConfig, PaddingConfig } from '../../Mixins/Spacing'
 import { FontSizeConfig } from '../../Mixins/Font'
-import { ColorfamilyConfig } from '../../Mixins/Color'
+import { ColorFamilyConfig } from '../../Mixins/Color'
 import { ColorFamilyContext, FontSizeContext, MarginContext, PaddingContext } from '../../Mixins/context'
 
 interface StyleContextType {
@@ -17,7 +17,7 @@ const StyleContext = (props : StyleContextType) => {
     <PaddingContext.Provider value={PaddingConfig}>
       <MarginContext.Provider value={MarginConfig}>
         <FontSizeContext.Provider value={FontSizeConfig}>
-          <ColorFamilyContext.Provider value={{...ColorfamilyConfig, isDark : isDarkMode}}>
+          <ColorFamilyContext.Provider value={{...ColorFamilyConfig, isDark : isDarkMode}}>
             {props.children}
           </ColorFamilyContext.Provider>
         </FontSizeContext.Provider>

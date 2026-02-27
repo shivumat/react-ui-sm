@@ -13,6 +13,6 @@ export const LineHeightConfig : SizeProps  = {
 export const getLineHeightStyling = (info : {size?: SizeType; lineHeight?: string; lineHeightConfig?: SizeProps}) => {
     const {size = 'm', lineHeight, lineHeightConfig} = info
     const value = lineHeight ?? lineHeightConfig?.[size]
-    if (!value) return ''
+    if (value === undefined || value === null || value === '') return ''
     return `line-height: ${value};`
 }
