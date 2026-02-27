@@ -1,7 +1,7 @@
 import newStyled from "@emotion/styled";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
-import { ColorConfigType, ColorFamilyType, darken, getBorderColor, getColor, getSurfaceColor, getTextColor, lighten } from "../../Mixins/Color";
+import { ColorConfigType, ColorFamilyType, getActiveOptionBackgroundColor, getBorderColor, getColor, getReadableTextOnColor, getSurfaceColor, getTextColor } from "../../Mixins/Color";
 import { getFontStyling } from "../../Mixins/Font";
 import { SizeProps, SizeType } from "../../Mixins/Size";
 import { getSpacing, SpacingProps } from "../../Mixins/Spacing";
@@ -122,14 +122,20 @@ const StyledOption = newStyled.div<{ isSelected?: boolean; colorConfig: ColorCon
     getSpacing({ spacingProps: padding, size: customSize, spaceConfig: paddingConfig, key: "padding" })}
   ${({ customSize, fontSize, fontSizeConfig }) => getFontStyling({ size: customSize, fontSize, fontConfig: fontSizeConfig })}
   background-color: ${({ isSelected, colorConfig , colorFamily, color}) => {
-    const defaultColor = colorFamily ? lighten(30, getColor({ colorFamily, color, colorConfig, disabled : false })) : (colorConfig?.isDark ? lighten(10, colorConfig.foreGround) : darken(10, colorConfig.backGround));
-    return (isSelected ? defaultColor : "transparent")
+    const activeBackground = getActiveOptionBackgroundColor({ colorConfig, colorFamily, color });
+    return isSelected ? activeBackground : "transparent"
   }};
-  color: ${({ isSelected, colorConfig }) =>
-    isSelected ? getTextColor(colorConfig) : getTextColor(colorConfig)};
+  color: ${({ isSelected, colorConfig, colorFamily, color }) => {
+    if (!isSelected) return getTextColor(colorConfig)
+    const activeBackground = getActiveOptionBackgroundColor({ colorConfig, colorFamily, color });
+    return getReadableTextOnColor(activeBackground, colorConfig)
+  }};
   &:hover {
-    background-color: ${({ colorConfig , colorFamily, color}) => colorFamily ? lighten(30, getColor({ colorFamily, color, colorConfig, disabled : false })) : (colorConfig?.isDark ? lighten(10, colorConfig.foreGround) : darken(10, colorConfig.backGround))};
-    color: ${({ colorConfig }) => getTextColor(colorConfig)};
+    background-color: ${({ colorConfig , colorFamily, color}) => getActiveOptionBackgroundColor({ colorConfig, colorFamily, color })};
+    color: ${({ colorConfig, colorFamily, color }) => {
+      const activeBackground = getActiveOptionBackgroundColor({ colorConfig, colorFamily, color });
+      return getReadableTextOnColor(activeBackground, colorConfig)
+    }};
   }
 `;
 
@@ -163,33 +169,25 @@ const DropdownBase = (props: DropdownInputProps & WithStyleSystemProps) => {
   const fontSizeConfig = styleSystem.typography.fontSize
   const colorConfig = styleSystem.colors
 
-  const handleToggle = useCallback(() => {
-    if (toggleRef.current) {
-      const rect = toggleRef.current.getBoundingClientRect();
-      setDropdownPosition({
-        top: rect.bottom,
-        left: rect.left,
-        width: rect.width,
-      });
-      setIsOpen((prev) => !prev);
-    }
+  const updateDropdownPosition = useCallback(() => {
+    if (!toggleRef.current) return
+
+    const rect = toggleRef.current.getBoundingClientRect();
+    const dropdownHeight = dropdownRef.current?.scrollHeight ?? 0;
+    const viewportHeight = window.innerHeight;
+
+    const top = rect.bottom + dropdownHeight > viewportHeight ? Math.max(8, rect.top - dropdownHeight) : rect.bottom;
+
+    setDropdownPosition({
+      top,
+      left: rect.left,
+      width: rect.width,
+    });
   }, []);
-  
-  useEffect(() => {
-    if (isOpen && dropdownRef.current) {
-      const rect = toggleRef.current!.getBoundingClientRect();
-      const dropdownHeight = dropdownRef.current.scrollHeight;
-      const viewportHeight = window.innerHeight;
-  
-      const position = {
-        top: rect.bottom + dropdownHeight > viewportHeight ? rect.top - dropdownHeight : rect.bottom,
-        left: rect.left,
-        width: rect.width,
-      };
-  
-      setDropdownPosition(position);
-    }
-  }, [isOpen]);
+
+  const handleToggle = useCallback(() => {
+    setIsOpen((prev) => !prev);
+  }, []);
   const handleSelect = useCallback(
     (option: DropdownOption) => {
       setSelectedValue(option.value);
@@ -204,6 +202,21 @@ const DropdownBase = (props: DropdownInputProps & WithStyleSystemProps) => {
       setSelectedValue(value);
     }
   }, [value]);
+
+  useEffect(() => {
+    if (!isOpen) return
+
+    updateDropdownPosition();
+
+    const handleViewportChange = () => updateDropdownPosition();
+    window.addEventListener("resize", handleViewportChange);
+    window.addEventListener("scroll", handleViewportChange, true);
+
+    return () => {
+      window.removeEventListener("resize", handleViewportChange);
+      window.removeEventListener("scroll", handleViewportChange, true);
+    };
+  }, [isOpen, options, updateDropdownPosition]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -258,7 +271,7 @@ const DropdownBase = (props: DropdownInputProps & WithStyleSystemProps) => {
             customSize={customSize}
             ref={dropdownRef}
             style={{
-              position: "absolute",
+              position: "fixed",
               top: dropdownPosition.top,
               left: dropdownPosition.left,
               width: dropdownPosition.width,

@@ -53,6 +53,24 @@ export const getTextColor = (colorConfig: ColorConfigType) => {
 export const getBorderColor = (colorConfig: ColorConfigType, alpha: number = 0.2) => {
     return tinycolor(colorConfig.foreGround).setAlpha(alpha).toRgbString()
 }
+
+export const getActiveOptionBackgroundColor = (info: {
+    colorConfig: ColorConfigType
+    colorFamily?: ColorFamilyType
+    color?: string
+}) => {
+    const { colorConfig, colorFamily, color } = info
+    if (color || colorFamily) {
+        return lighten(30, getColor({ colorFamily, color, colorConfig, disabled: false }))
+    }
+    return colorConfig.isDark ? lighten(10, colorConfig.foreGround) : darken(10, colorConfig.backGround)
+}
+
+export const getReadableTextOnColor = (backgroundColor: string, colorConfig: ColorConfigType) => {
+    return tinycolor
+      .mostReadable(backgroundColor, [colorConfig.foreGround, colorConfig.backGround, "#000000", "#ffffff"])
+      .toHexString()
+}
  
 // --------------------------------------------------------------------------------------------------------------------
 // Helper Functions for Color Manipulation
